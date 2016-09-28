@@ -1,0 +1,7 @@
+node_modules/
+*.swp
+.DS_Store
+Thumbs.db
+tmp/
+bower_components/
+config.ts
