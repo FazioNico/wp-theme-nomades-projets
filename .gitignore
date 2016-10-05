@@ -4,4 +4,4 @@ node_modules/
 Thumbs.db
 tmp/
 bower_components/
-config.ts
+config.js

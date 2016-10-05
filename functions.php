@@ -140,6 +140,119 @@ require get_template_directory() . '/inc/customizer.php';
  * Load Jetpack compatibility file.
  */
 require get_template_directory() . '/inc/jetpack.php';
+/** ----------------------------------------------------------------------- */
+//// Bof - Add menu location
+function register_my_menus() {
+  register_nav_menus(
+    array(
+      'secondary' => __( 'Secondary' )
+    )
+  );
+}
+add_action( 'init', 'register_my_menus' );
+//// Eof - add menu location
+/// Bof - AJOUTER PAGE PROJET (WP_CUSTOM_TYPE) SUR ADMIN
+function projet_module() {
+	 $args = array(
+	 'label' => __('Projets'),
+	 'singular_label' => __('Projet'),
+	 'public' => true,
+	 'show_ui' => true,
+	 '_builtin' => false, // It's a custom post type, not built in
+	 '_edit_link' => 'post.php?post=%d',
+	 'capability_type' => 'post',
+	 'hierarchical' => false,
+	 'rewrite' => array("slug" => "projets"),
+	 'query_var' => "projets", // This goes to the WP_Query schema
+	 'supports' => array('title', 'thumbnail', 'page-attributes'), //titre + zone de texte + champs personnalisés + miniature valeur possible : 'title','editor','author','thumbnail','excerpt', 'page-attributes'
+	 'taxonomies' => array('category')
+	 );
+	 register_post_type( 'projet' , $args ); // enregistrement de l'entité projet basé sur les arguments ci-dessus
+	 //register_taxonomy_for_object_type('post_tag', 'projet','show_tagcloud=1&hierarchical=true'); // ajout des mots clés pour notre custom post type
+ 	 add_action("admin_init", "admin_init"); //function pour ajouter des champs personnalisés
+ 	 add_action('save_post', 'save_custom'); //function pour la sauvegarde de nos champs personnalisés
+}
+add_action('init', 'projet_module');
+
+function admin_init(){ //initialisation des champs spécifiques
+	 add_meta_box("url_projet", "Url du projet", "url_projet", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction url_projet()
+	 add_meta_box("project_type", "Type de Projet", "project_type", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction mention()
+	 add_meta_box("mention", "Mentions", "mention", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction mention()
+	 add_meta_box("project_year", "Année", "project_year", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction mention()
+}
+function project_year(){     //La fonction qui affiche notre champs personnalisé dans l'administration
+	global $post;
+	$custom = get_post_custom($post->ID); //fonction pour récupérer la valeur de notre champ
+	$project_year = $custom["project_year"][0];
+	echo('<select class="" name="project_year">');
+	for ($i= date("Y") - (date("Y")-2000);  $i <= date("Y")+1; $i++) {
+
+		?>
+		<option value="<?php echo $i;?>"  <?php if(intval($project_year) == $i){echo ' selected ';}elseif($i == intval(date("Y")) && $project_year === NULL){echo ' selected ';}?> >
+			<?php echo $i;?>
+		</option>
+		<?php
+	}
+	echo('</select>');
+}
+function project_type(){     //La fonction qui affiche notre champs personnalisé dans l'administration
+	global $post;
+	$custom = get_post_custom($post->ID); //fonction pour récupérer la valeur de notre champ
+	$project_type = $custom["project_type"][0];
+	?>
+	<p>
+		<input type="radio" name="project_type" <?php if($project_type === 'wp'){echo 'checked';}?> value="wp">WordPress<br />
+		<input type="radio" name="project_type" <?php if($project_type === 'static'){echo 'checked';}?> value="static">Static<br />
+		<input type="radio" name="project_type" <?php if($project_type === 'atypique'){echo 'checked';}?> value="atypique">Atypique
+	</p>
+	<?php
+}
+function mention(){     //La fonction qui affiche notre champs personnalisé dans l'administration
+	global $post;
+	$custom = get_post_custom($post->ID); //fonction pour récupérer la valeur de notre champ
+	$mention = $custom["mention"][0];
+	?>
+	<p>
+		<input type="radio" name="mention" <?php if($mention === '1'){echo 'checked';}?> value="1">Très bien<br />
+		<input type="radio" name="mention" <?php if($mention === '2'){echo 'checked';}?> value="2">Bien
+	</p>
+	<?php
+}
+function url_projet(){     //La fonction qui affiche notre champs personnalisé dans l'administration
+	global $post;
+	$custom = get_post_custom($post->ID); //fonction pour récupérer la valeur de notre champ
+	$url_projet = $custom["url_projet"][0];
+	?>
+	<input size="70" type="text" value="<?php echo $url_projet;?>" name="url_projet"/>
+	<?php
+}
+
+function save_custom(){ //sauvegarde des champs spécifiques
+	global $post;
+	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) { // fonction pour éviter  le vidage des champs personnalisés lors de la sauvegarde automatique
+		return $postID;
+	}
+	update_post_meta($post->ID, "project_year", $_POST["project_year"]);
+	update_post_meta($post->ID, "project_type", $_POST["project_type"]);
+	update_post_meta($post->ID, "mention", $_POST["mention"]);
+	update_post_meta($post->ID, "url_projet", $_POST["url_projet"]); //enregistrement dans la base de données
+}
+
+$labelsEleves = array(
+	'name' => _x( 'Élèves', 'post type general name' ),
+	'singular_name' => _x( 'Élève', 'post type singular name' ),
+	'add_new' => _x( 'Add New', 'élève' ),
+	'add_new_item' => __( 'Ajouter un élève' ),
+	'edit_item' => __( 'Modifier le élève' ),
+	'new_item' => __( 'Nouvel élève' ),
+	'view_item' => __( "Voir l'élève" ),
+	'search_items' => __( 'Rechercher des élèves' ),
+	'not_found' =>  __( 'Aucun élève trouvé' ),
+	'not_found_in_trash' => __( 'Aucun élève trouvé' ),
+	'parent_item_colon' => ''
+);
+register_taxonomy("eleves", array("projet"), array("hierarchical" => true, "labels" => $labelsEleves, "rewrite" => true));
+/// Eof - AJOUTER PAGE PROJET (WP_CUSTOM_TYPE) SUR ADMIN
 
 // remove & clean wp header
 // Remove All Yoast HTML Comments

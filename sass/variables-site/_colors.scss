@@ -18,3 +18,11 @@ $color__border-button-hover: #ccc #bbb #aaa;
 $color__border-button-focus: #aaa #bbb #bbb;
 $color__border-input: #ccc;
 $color__border-abbr: #666;
+
+$color__primary: #CD0022;
+$color__secondary: #333;
+
+
+.text-primary {
+  color: $color__primary;
+}
