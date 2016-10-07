@@ -6,7 +6,7 @@
  *
  * @package Nomades_Projets
  */
-
+ 
 if ( ! function_exists( 'nomades_projets_setup' ) ) :
 /**
  * Sets up theme defaults and registers support for various WordPress features.
@@ -252,7 +252,33 @@ $labelsEleves = array(
 	'parent_item_colon' => ''
 );
 register_taxonomy("eleves", array("projet"), array("hierarchical" => true, "labels" => $labelsEleves, "rewrite" => true));
+
+/* display all post_type in $WP_Query */
+function add_custom_post_type_to_wp_query($query) {
+    if(
+        empty($query->query['post_type'])
+        or $query->query['post_type'] === 'post'
+    ){
+        $query->set('post_type', array('post_type' => 'any'));
+    }
+}
+add_action('pre_get_posts', 'add_custom_post_type_to_wp_query');
 /// Eof - AJOUTER PAGE PROJET (WP_CUSTOM_TYPE) SUR ADMIN
+
+/// Bof - Remove Tags prefix in the_archive_title and more...
+add_filter( 'get_the_archive_title', function ($title) {
+    if ( is_category() ) {
+        $title = single_cat_title( '', false );
+    }
+		elseif ( is_tag() ) {
+        $title = single_tag_title( '', false );
+    }
+		elseif ( is_author() ) {
+        $title = '<span class="vcard">' . get_the_author() . '</span>' ;
+    }
+    return $title;
+});
+/// Eof - Remove Tags prefix
 
 // remove & clean wp header
 // Remove All Yoast HTML Comments

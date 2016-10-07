@@ -1,3 +1,15 @@
+body.home.page #menu-formations li:last-child a {
+	color: $color__primary;
+}
+ul#menu-formations {
+	list-style: none;
+	margin:0;
+	padding:0;
+
+}
+li.current-menu-item a{
+		color: $color__primary;
+}
 .main-navigation {
 	clear: both;
 	display: block;

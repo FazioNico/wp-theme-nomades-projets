@@ -78,7 +78,7 @@ gulp.task('js', function() {
 
 // Task to copy *.php files in desDir
 gulp.task('php', function () {
-  return gulp.src(['./**/*.php'])
+  return gulp.src(['./**/*.php', './template-parts/*.php'])
     .pipe(gulp.dest(path.desDir))
     .pipe(reload({stream:true}));
 });
@@ -110,6 +110,7 @@ gulp.task('browser-sync', function() {
 // Rerun the task when a file changes
  gulp.task('watch', function() {
   gulp.watch('./**/*.php', ['php']);
+  gulp.watch('./template-parts/*.php', ['php']);
   gulp.watch('./js/*.js', ['js']);
   gulp.watch('./style.css', ['css']); 
   gulp.watch('./sass/**/*.scss', ['sass']); 

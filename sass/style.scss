@@ -104,11 +104,14 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 # Media
 --------------------------------------------------------------*/
 @import "media/media";
+@import "elements/grid";
 
 // style for Header
+.separation-header {
+	background-color: $color__secondary;
+}
 .site-branding {
 	padding-top: 20px;
-	border-bottom: solid 1px $color__secondary;
 }
 #header-logo {
 

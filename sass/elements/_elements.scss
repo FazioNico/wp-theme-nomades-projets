@@ -41,3 +41,25 @@ figure {
 }
 
 @import "tables";
+/// @import "grid"; => import in the main style.scss
+
+@media (min-width: 769px) {
+	.site-header {
+		.col-sm-4 {
+		    min-height: 110px;
+		    display: table;
+		}
+		.col-sm-4 > *:first-child {
+			display: table-cell;
+	    vertical-align: bottom;
+		}
+	}
+}
+.header-search-form {
+	form {
+	    text-align: right;
+	}
+	.search-submit {
+		display: none;
+	}
+}
