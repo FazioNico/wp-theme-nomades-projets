@@ -16,6 +16,16 @@ li.current-menu-item a{
 	float: left;
 	width: 100%;
 
+	li {
+		padding: 0px 8px;
+	}
+	li:after {
+		content: '|';
+		position: absolute;
+		top: 0;
+		margin-left: -10px;
+	}
+
 	ul {
 		display: none;
 		list-style: none;
@@ -34,7 +44,6 @@ li.current-menu-item a{
 				left: -999em;
 				top: 0;
 			}
-
 			li {
 				&:hover > ul,
 				&.focus > ul {
