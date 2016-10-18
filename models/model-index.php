@@ -22,6 +22,15 @@
       <?php
         get_template_part('template-parts/navigation', 'page');
       ?>
+      <div class="slider-content">
+        <?php
+          get_template_part('template-parts/slider', 'default');
+        ?>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col col sm-12">
       <main id="main" class="site-main index" role="main">
         <?php
           /// Bof - while custom post type
