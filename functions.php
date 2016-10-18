@@ -6,7 +6,7 @@
  *
  * @package Nomades_Projets
  */
- 
+
 if ( ! function_exists( 'nomades_projets_setup' ) ) :
 /**
  * Sets up theme defaults and registers support for various WordPress features.
@@ -279,6 +279,9 @@ add_filter( 'get_the_archive_title', function ($title) {
     return $title;
 });
 /// Eof - Remove Tags prefix
+
+
+
 
 // remove & clean wp header
 // Remove All Yoast HTML Comments

@@ -10,6 +10,7 @@
 
 ?>
 <?php
+  print_r($post);
   // the_title( '<h1 class="entry-title">', '</h1>' );
   // get the custome meta post ( echo $customMetaPost["url_projet"][0];)
   $customMetaPost = get_post_custom($post->ID);
