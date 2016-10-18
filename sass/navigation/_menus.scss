@@ -8,9 +8,8 @@ ul#menu-formations {
 
 	li {
 		margin-bottom: 8px;
-		a {
-			color:#999999;
-		}
+		color:#999999;
+
 	}
 }
 li.current-menu-item a{
@@ -23,7 +22,7 @@ li.current-menu-item a{
 	width: 100%;
 
 	li {
-		padding: 0px 8px 0px 4.0rem;
+		padding: 0px 8px;
 	}
 	li:after {
 		content: '|';

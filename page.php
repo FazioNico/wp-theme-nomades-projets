@@ -28,6 +28,9 @@ get_header(); ?>
 			</aside>
 		</div>
     <div class="col col-sm-8">
+      <?php
+        get_template_part('template-parts/navigation', 'page');
+      ?>
 			<main id="main" class="site-main index" role="main">
 			  <?php
 			    /// Bof - page

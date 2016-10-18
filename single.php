@@ -21,6 +21,9 @@ get_header(); ?>
 </aside>
 <main id="main" class="site-main single" role="main">
   <?php
+    get_template_part('template-parts/navigation', 'page');
+  ?>
+  <?php
 		while ( have_posts() ) : the_post();
 			if ($post->post_type == 'projet'){
 				get_template_part( 'template-parts/single', 'projet' );
