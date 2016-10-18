@@ -25,7 +25,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col col sm-12">
+    <div class="col col-sm-12">
       <main id="main" class="site-main index" role="main">
         <?php
           /// Bof - while custom post type
