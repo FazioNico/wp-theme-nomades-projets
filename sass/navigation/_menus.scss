@@ -22,7 +22,7 @@ li.current-menu-item a{
 	width: 100%;
 
 	li {
-		padding: 0px 8px;
+		padding: 0px 8px ;
 	}
 	li:after {
 		content: '|';
@@ -58,6 +58,7 @@ li.current-menu-item a{
 
 			a {
 				width: 200px;
+				color: $color__secondary_darken;
 			}
 
 			:hover > a,
@@ -87,6 +88,7 @@ li.current-menu-item a{
 	a {
 		display: block;
 		text-decoration: none;
+		color: $color__secondary_darken;
 	}
 
 	.current_page_item > a,

@@ -141,7 +141,7 @@ h1.site-title  {
     text-transform: uppercase;
 
 		a {
-			color: $color__secondary;
+			color: $color__secondary_darken;
 		}
 		a:hover {
 			color: $color__primary;
@@ -153,7 +153,7 @@ h1.site-title  {
 	height: 40px;
 
 	.row{
-		margin: 0px 8px;
+		margin: 0px -10px;
 	}
 }
 #primary-menu{
