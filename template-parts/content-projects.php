@@ -14,6 +14,20 @@
   // get the custome meta post ( echo $customMetaPost["url_projet"][0];)
   $customMetaPost = get_post_custom($post->ID);
   $mention = $customMetaPost["mention"][0];
+  switch ($mention) {
+    case 0:
+      $mentionTitle = 'Travaux non certifiés';
+      break;
+    case 1:
+      $mentionTitle = 'Certification';
+      break;
+    case 2:
+      $mentionTitle = 'Mention Bien';
+      break;
+    case 3:
+      $mentionTitle = 'Mention Très Bien';
+      break;
+  }
   $project_year = $customMetaPost["project_year"][0];
   $eleve = get_the_terms($post->ID, 'eleves', '', ', ','')[0]->name;
   $url_projet = $customMetaPost["url_projet"][0];
