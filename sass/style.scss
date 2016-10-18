@@ -109,6 +109,7 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 // style for Header
 .separation-header {
 	background-color: $color__secondary;
+	margin-bottom: 5px;
 }
 .site-branding {
 	padding-top: 20px;
@@ -150,6 +151,10 @@ h1.site-title  {
 #site-navigation {
 	position: relative;
 	height: 40px;
+
+	.row{
+		margin: 0px 8px;
+	}
 }
 #primary-menu{
     position: absolute;

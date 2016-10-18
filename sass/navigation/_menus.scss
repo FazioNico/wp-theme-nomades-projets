@@ -6,6 +6,12 @@ ul#menu-formations {
 	margin:0;
 	padding:0;
 
+	li {
+		margin-bottom: 8px;
+		a {
+			color:#999999;
+		}
+	}
 }
 li.current-menu-item a{
 		color: $color__primary;
@@ -17,7 +23,7 @@ li.current-menu-item a{
 	width: 100%;
 
 	li {
-		padding: 0px 8px;
+		padding: 0px 8px 0px 4.0rem;
 	}
 	li:after {
 		content: '|';
