@@ -24,15 +24,20 @@
   //var_dump($eleve);
   ?>
   <article class="">
-    <?php
-      print($eleve.'<br/>');
-      the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' );
-      print('
-        <div class="thumb-projet img-responsive" >
-          <a class="text-primary" href="'.$url_pageProjet.'" title="projet">
-            <img src="'.$imgURL.'" alt="Projet de '.$eleve.'" />
-          </a>
-        </div>
-      ');
-    ?>  
+    <header class="entry-header">
+    		<h1 class="entry-title"><?php print($eleve);?></h1>
+    </header>
+    <div class="entry-content">
+      <?php
+        the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' );
+        print('
+          <div class="thumb-projet img-responsive" >
+            <a class="text-primary" href="'.$url_pageProjet.'" title="projet">
+              <img src="'.$imgURL.'" alt="Projet de '.$eleve.'" />
+            </a>
+          </div>
+        ');
+      ?>
+    </div>
+
   </article>
