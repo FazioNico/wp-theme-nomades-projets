@@ -22,11 +22,6 @@
       <?php
         get_template_part('template-parts/navigation', 'page');
       ?>
-      <div class="slider-content">
-        <?php
-          get_template_part('template-parts/slider', 'default');
-        ?>
-      </div>
     </div>
   </div>
   <div class="row">
