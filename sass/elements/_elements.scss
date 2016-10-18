@@ -13,6 +13,10 @@ body {
 	background: $color__background-body; /* Fallback for when there is no custom background color defined. */
 }
 
+article {
+	color: $color__secondary;
+	padding-top:30px;
+}
 blockquote, q {
 	quotes: "" "";
 
@@ -65,4 +69,7 @@ figure {
 }
 aside {
 	margin-top: 8px;
+}
+.hide {
+	display: none;
 }
