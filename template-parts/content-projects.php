@@ -24,9 +24,6 @@
   //var_dump($eleve);
   ?>
   <article class="">
-    <header class="entry-header">
-    		<h1 class="entry-title"><?php print($eleve);?></h1>
-    </header>
     <div class="entry-content">
       <?php
         the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' );
