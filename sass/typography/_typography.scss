@@ -10,8 +10,10 @@ textarea {
 	line-height: $font__line-height-body;
 	letter-spacing: 2px;
 }
-main {
+main, section, article {
 	letter-spacing: 1px;
+	font-weight: 400;
+	color: #787878 !important;
 }
 
 @import "headings";
