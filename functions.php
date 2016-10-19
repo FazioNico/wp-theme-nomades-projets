@@ -213,8 +213,10 @@ function mention(){     //La fonction qui affiche notre champs personnalisé dan
 	$mention = $custom["mention"][0];
 	?>
 	<p>
-		<input type="radio" name="mention" <?php if($mention === '1'){echo 'checked';}?> value="1">Très bien<br />
-		<input type="radio" name="mention" <?php if($mention === '2'){echo 'checked';}?> value="2">Bien
+		<input type="radio" name="mention" <?php if($mention === '0'){echo 'checked';}?> value="0">Travaux non certifiés<br />
+		<input type="radio" name="mention" <?php if($mention === '1'){echo 'checked';}?> value="1">Certifiés<br />
+		<input type="radio" name="mention" <?php if($mention === '2'){echo 'checked';}?> value="2">Bien<br />
+		<input type="radio" name="mention" <?php if($mention === '3'){echo 'checked';}?> value="3">Très Bien
 	</p>
 	<?php
 }

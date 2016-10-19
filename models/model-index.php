@@ -53,19 +53,19 @@
               $mention = $customMetaPost["mention"][0];
               switch ($mention) {
                 case 0:
-                  print_r('Travaux non certifiés '.$mention);
+                  print_r('Travaux non certifiés ');
                   get_template_part('template-parts/content', 'projects');
                   break;
                 case 1:
-                  print_r('Certification '.$mention);
+                  print_r('Certification ');
                   get_template_part('template-parts/content', 'projects');
                   break;
                 case 2:
-                  print_r('Mention Bien '.$mention);
+                  print_r('Mention Bien ');
                   get_template_part('template-parts/content', 'projects');
                   break;
                 case 3:
-                  print_r('Mention Très Bien '.$mention);
+                  print_r('Mention Très Bien ');
                   get_template_part('template-parts/content', 'projects');
                   break;
               }
