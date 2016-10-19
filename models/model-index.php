@@ -21,7 +21,18 @@
     <div class="col col-sm-8">
       <?php
         get_template_part('template-parts/navigation', 'page');
-      ?>
+        
+        if( get_option( 'page_on_front' ) ) {
+          print_r('
+            <article>
+              <div class="entry-content">'.
+                  apply_filters( 'the_content', get_post( get_option( 'page_on_front' ) )->post_content )
+              .'
+              </div>
+            </article>
+          ');
+        }
+  		?>
     </div>
   </div>
   <div class="row">
