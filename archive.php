@@ -25,6 +25,16 @@ get_header(); ?>
     <div class="col col-sm-8">
       <?php
         get_template_part('template-parts/navigation', 'page');
+        /// Bof - page
+        print_r('
+          <section>
+            <div class="entry-content">
+              <h1 class="hide">'.single_cat_title("", false).'</h1>
+              '.category_description().'
+            </div>
+          </section>
+        ');
+
       ?>
     </div>
   </div>
@@ -32,8 +42,7 @@ get_header(); ?>
     <div class="col col-sm-12">
       <main id="main" class="site-main archive" role="main">
       		<?php
-      		if ( have_posts() ) : ?>
-      			<?php
+      		if ( have_posts() ) :
       			/* Start the Loop */
       			while ( have_posts() ) : the_post();
       				/*
@@ -46,7 +55,8 @@ get_header(); ?>
       			the_posts_navigation();
       		else :
       			get_template_part( 'template-parts/content', 'none' );
-      		endif; ?>
+      		endif;
+          ?>
 
       </main><!-- #main -->
     </div>

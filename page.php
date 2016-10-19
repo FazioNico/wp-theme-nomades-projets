@@ -30,25 +30,38 @@ get_header(); ?>
     <div class="col col-sm-8">
       <?php
         get_template_part('template-parts/navigation', 'page');
+        /// Bof - page
+        if ( have_posts() ) :
+          while ( have_posts() ) : the_post();
+            get_template_part( 'template-parts/content', 'page' );
+          endwhile; // End of the loop.
+        else :
+    			get_template_part( 'template-parts/content', 'none' );
+    		endif;
       ?>
-			<main id="main" class="site-main index" role="main">
-			  <?php
-			    /// Bof - page
-					while ( have_posts() ) : the_post();
-
-						get_template_part( 'template-parts/content', 'page' );
-
-						// If comments are open or we have at least one comment, load up the comment template.
-						if ( comments_open() || get_comments_number() ) :
-							comments_template();
-						endif;
-
-					endwhile; // End of the loop.
-			    //// Eof - while custom post type
-			  ?>
-			</main>
 		</div>
 	</div>
+  <div class="row">
+    <div class="col col-sm-12">
+      <main id="main" class="site-main index" role="main">
+        <?php
+          /// Bof - while custom post type
+          $projects_query = array(
+            'post_type' => 'projet',
+            'posts_per_page' => '20',
+            'order' => 'ASC',
+          	'orderby'   =>  array( 'meta_value_num' => 'ASC', 'title' => 'ASC' ),
+          	'meta_key'  => 'mention'
+          );
+          query_posts($projects_query);
+          while ( have_posts() ) : the_post();
+              get_template_part('template-parts/content', 'projects');
+          endwhile;
+          //// Eof - while custom post type
+        ?>
+      </main>
+    </div>
+  </div>
 </div>
 
 
