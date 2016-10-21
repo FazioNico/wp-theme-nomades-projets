@@ -39,6 +39,7 @@
     <div class="col col-sm-12">
       <main id="main" class="site-main index" role="main">
         <?php
+
           /// Bof - while custom post type
           $projects_query = array(
             'post_type' => 'projet',
