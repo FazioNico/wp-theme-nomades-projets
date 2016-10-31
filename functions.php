@@ -180,9 +180,9 @@ function admin_init(){ //initialisation des champs spécifiques
 	 add_meta_box("project_type", "Type de Projet", "project_type", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction mention()
 
 	 // img reader & saver
-	 //add_meta_box('project_image_box', 'Upload Image', 'project_render_image_attachment_box', 'projet', 'normal', 'high');
+	 add_meta_box('project_image_box', 'Upload Image', 'project_render_image_attachment_box', 'projet', 'normal', 'high');
 	 //add_meta_box("custom_thumbnail", "Images Preview", "custom_thumbnail", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction custom_thumbnail()
-	 add_meta_box("displayAttachedImg", "Images du projet", "displayAttachedImg", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction custom_thumbnail()
+	 //add_meta_box("displayAttachedImg", "Images du projet", "displayAttachedImg", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction custom_thumbnail()
 
 	 add_meta_box("mention", "Mentions", "mention", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction mention()
 	 add_meta_box("project_year", "Année", "project_year", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction mention()
@@ -222,6 +222,7 @@ function post_edit_form_tag( ) {
 add_action( 'post_edit_form_tag' , 'post_edit_form_tag' );
 
 function displayAttachedImg(){
+	global $post;
 	echo 'Ajouter une image<br/>';
 	echo '<input type="file" name="upload_attachment" id="upload_attachment" value="'.get_option('upload_attachment').'"/>';
 	echo '<hr/>';
@@ -232,8 +233,10 @@ function displayAttachedImg(){
       'post_parent' => $post->ID
   ) );
 	echo '<div id="attachementImg">';
+	var_dump($post->ID);
   if ( $attachments ) {
       foreach ( $attachments as $attachment ) {
+				//var_dump(wp_get_attachment_image_src( $attachment->ID, 'full' ));
           ?>
 							<img data-id="<?php echo $attachment->ID;?>" alt="img ID: <?php echo $attachment->ID;?>" src="<?php echo wp_get_attachment_image_src( $attachment->ID, 'full' )[0]; ?>" style="width:100%;">
 					<?php
@@ -241,32 +244,58 @@ function displayAttachedImg(){
   }
 	echo '</div>';
 }
+
+function delete_attachment( $post ) {
+		global $post;
+    //echo $_POST['att_ID'];
+    $msg = 'Attachment ID [' . $_POST['att_ID'] . '] has been deleted!';
+    if( wp_delete_attachment( $_POST['att_ID'], true )) {
+        echo $msg;
+    }
+    die();
+}
+add_action( 'wp_ajax_delete_attachment', 'delete_attachment' );
+
 function project_render_image_attachment_box($post) {
-    // See if there's an existing image. (We're associating images with posts by saving the image's 'attachment id' as a post meta value)
-    // Incidentally, this is also how you'd find any uploaded files for display on the frontend.
-    $existing_image_id = get_post_meta($post->ID,'_project_attached_image', true);
-    if(is_numeric($existing_image_id)) {
-        echo '<div>';
-            $arr_existing_image = wp_get_attachment_image_src($existing_image_id, 'large');
-            $existing_image_url = $arr_existing_image[0];
-            echo '<img style="width:100%" src="' . $existing_image_url . '" />';
-        echo '</div>';
-    }
-    // If there is an existing image, show it
-    if($existing_image_id) {
-        echo '<div>Attached Image ID: ' . $existing_image_id . '</div>';
-    }
-    echo 'Upload an image: <input type="file" name="project_image" id="project_image" />';
-    // See if there's a status message to display (we're using this to show errors during the upload process, though we should probably be using the WP_error class)
-    $status_message = get_post_meta($post->ID,'_project_attached_image_upload_feedback', true);
-    // Show an error message if there is one
-    if($status_message) {
-        echo '<div class="upload_status_message">';
-            echo $status_message;
-        echo '</div>';
-    }
-    // Put in a hidden flag. This helps differentiate between manual saves and auto-saves (in auto-saves, the file wouldn't be passed).
-    echo '<input type="hidden" name="project_manual_save_flag" value="true" />';
+		global $post;
+
+		    // See if there's an existing image. (We're associating images with posts by saving the image's 'attachment id' as a post meta value)
+		    // Incidentally, this is also how you'd find any uploaded files for display on the frontend.
+		    $existing_image_id = get_post_meta($post->ID,'_xxxx_attached_image', true);
+		    if(is_numeric($existing_image_id)) {
+
+		        echo '<div id="attachementImg">';
+		            $arr_existing_image = wp_get_attachment_image_src($existing_image_id, 'large');
+		            $existing_image_url = $arr_existing_image[0];
+		            echo '<img data-id="'.$existing_image_id.'" style="width:100%;" src="' . $existing_image_url . '" />';
+		        echo '</div>';
+
+		    }
+
+		    // If there is an existing image, show it
+		    if($existing_image_id) {
+
+		      //  echo '<div>Attached Image ID: ' . $existing_image_id . '</div>';
+
+		    }
+
+		    echo 'Upload an image: <input type="file" name="upload_attachment" id="upload_attachment" />';
+
+		    // See if there's a status message to display (we're using this to show errors during the upload process, though we should probably be using the WP_error class)
+		    $status_message = get_post_meta($post->ID,'_xxxx_attached_image_upload_feedback', true);
+
+		    // Show an error message if there is one
+		    if($status_message) {
+
+		        echo '<div class="upload_status_message">';
+		            echo $status_message;
+		        echo '</div>';
+
+		    }
+
+		    // Put in a hidden flag. This helps differentiate between manual saves and auto-saves (in auto-saves, the file wouldn't be passed).
+		    echo '<input type="hidden" name="xxxx_manual_save_flag" value="true" />';
+
 }
 
 
@@ -301,135 +330,218 @@ function url_projet(){     //La fonction qui affiche notre champs personnalisé 
 	<?php
 }
 
-function save_custom(){ //sauvegarde des champs spécifiques
-	if ( !function_exists( 'wp_handle_upload' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/file.php' );
-	}
+function save_img_attachement_post() {
 	global $post;
-	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) { // fonction pour éviter  le vidage des champs personnalisés lors de la sauvegarde automatique
-		return $postID;
-	}
-
 	$post_id = $post->ID;
-	// post type in the passed object isn't "revision"
-	$post_type = $post->post_type;
-	//
-	// // Make sure our flag is in there, otherwise it's an autosave and we should bail.
-	// if($post_id && isset($_POST['project_manual_save_flag'])) {
-	// 		// Logic to handle specific post types
-	//
-	// 		switch($post_type) {
-	// 				// If this is a post. You can change this case to reflect your custom post slug
-	// 				case 'projet':
-	// 						// HANDLE THE FILE UPLOAD
-	// 						// If the upload field has a file in it
-	// 						if(isset($_FILES['project_image']) && ($_FILES['project_image']['size'] > 0)) {
-	// 								// Get the type of the uploaded file. This is returned as "type/extension"
-	// 								$arr_file_type = wp_check_filetype(basename($_FILES['project_image']['name']));
-	// 								$uploaded_file_type = $arr_file_type['type'];
-	// 								// Set an array containing a list of acceptable formats
-	// 								$allowed_file_types = array('image/jpg','image/jpeg','image/gif','image/png');
-	// 								// If the uploaded file is the right format
-	// 								if(in_array($uploaded_file_type, $allowed_file_types)) {
-	// 										// Options array for the wp_handle_upload function. 'test_upload' => false
-	// 										$upload_overrides = array( 'test_form' => false );
-	// 										// Handle the upload using WP's wp_handle_upload function. Takes the posted file and an options array
-	// 										$uploaded_file = wp_handle_upload($_FILES['project_image'], $upload_overrides);
-	// 										// If the wp_handle_upload call returned a local path for the image
-	// 										if(isset($uploaded_file['file'])) {
-	// 												// The wp_insert_attachment function needs the literal system path, which was passed back from wp_handle_upload
-	// 												$file_name_and_location = $uploaded_file['file'];
-	// 												// Generate a title for the image that'll be used in the media library
-	// 												$file_title_for_media_library = '';
-	// 												// Set up options array to add this file as an attachment
-	// 												$attachment = array(
-	// 														'post_mime_type' => $uploaded_file_type,
-	// 														'post_title' => 'Uploaded image ' . addslashes($file_title_for_media_library),
-	// 														'post_content' => '',
-	// 														'post_status' => 'inherit'
-	// 												);
-	// 												// Run the wp_insert_attachment function. This adds the file to the media library and generates the thumbnails. If you wanted to attch this image to a post, you could pass the post id as a third param and it'd magically happen.
-	// 												$attach_id = wp_insert_attachment( $attachment, $file_name_and_location );
-	// 												require_once(ABSPATH . "wp-admin" . '/includes/image.php');
-	// 												$attach_data = wp_generate_attachment_metadata( $attach_id, $file_name_and_location );
-	// 												wp_update_attachment_metadata($attach_id,  $attach_data);
-	// 												// Before we update the post meta, trash any previously uploaded image for this post.
-	// 												// You might not want this behavior, depending on how you're using the uploaded images.
-	// 												$existing_uploaded_image = (int) get_post_meta($post_id,'_project_attached_image', true);
-	// 												if(is_numeric($existing_uploaded_image)) {
-	// 														wp_delete_attachment($existing_uploaded_image);
-	// 												}
-	// 												// Now, update the post meta to associate the new image with the post
-	// 												update_post_meta($post_id,'_project_attached_image',$attach_id);
-	// 												// Set the feedback flag to false, since the upload was successful
-	// 												$upload_feedback = false;
-	// 										} else { // wp_handle_upload returned some kind of error. the return does contain error details, so you can use it here if you want.
-	// 												$upload_feedback = 'There was a problem with your upload.';
-	// 												update_post_meta($post_id,'_project_attached_image',$attach_id);
-	// 										}
-	// 								} else { // wrong file type
-	// 										$upload_feedback = 'Please upload only image files (jpg, gif or png).';
-	// 										update_post_meta($post_id,'_project_attached_image',$attach_id);
-	// 								}
-	// 						} else { // No file was passed
-	// 								$upload_feedback = false;
-	// 						}
-	// 						// Update the post meta with any feedback
-	// 						update_post_meta($post_id,'_project_attached_image_upload_feedback',$upload_feedback);
-	// 				break;
-	// 				default:
-	// 		} // End switch
-	// 		return;
-	// } // End if manual save flag
+	//var_dump($_FILES['upload_attachment']);
+    // Get the post type. Since this function will run for ALL post saves (no matter what post type), we need to know this.
+    // It's also important to note that the save_post action can runs multiple times on every post save, so you need to check and make sure the
+    // post type in the passed object isn't "revision"
+    $post_type = $post->post_type;
+    // Make sure our flag is in there, otherwise it's an autosave and we should bail.
+    if($post_id) {
 
+        // Logic to handle specific post types
+        switch($post_type) {
+            // If this is a post. You can change this case to reflect your custom post slug
+            case 'projet':
+                // HANDLE THE FILE UPLOAD
+                // If the upload field has a file in it
+                if(isset($_FILES['upload_attachment']) && ($_FILES['upload_attachment']['size'] > 0)) {
+                    // Get the type of the uploaded file. This is returned as "type/extension"
+                    $arr_file_type = wp_check_filetype(basename($_FILES['upload_attachment']['name']));
+                    $uploaded_file_type = $arr_file_type['type'];
+                    // Set an array containing a list of acceptable formats
+                    $allowed_file_types = array('image/jpg','image/jpeg','image/gif','image/png');
+                    // If the uploaded file is the right format
+                    if(in_array($uploaded_file_type, $allowed_file_types)) {
+                        // Options array for the wp_handle_upload function. 'test_upload' => false
+                        $upload_overrides = array( 'test_form' => false );
+                        // Handle the upload using WP's wp_handle_upload function. Takes the posted file and an options array
+                        $uploaded_file = wp_handle_upload($_FILES['upload_attachment'], $upload_overrides);
+                        // If the wp_handle_upload call returned a local path for the image
+                        if(isset($uploaded_file['file'])) {
+                            // The wp_insert_attachment function needs the literal system path, which was passed back from wp_handle_upload
+                            $file_name_and_location = $uploaded_file['file'];
+                            // Generate a title for the image that'll be used in the media library
+                            $file_title_for_media_library = 'your title here';
+                            // Set up options array to add this file as an attachment
+                            $attachment = array(
+                                'post_mime_type' => $uploaded_file_type,
+                                'post_title' => 'Uploaded image ' . addslashes($file_title_for_media_library),
+                                'post_content' => '',
+                                'post_status' => 'inherit'
+                            );
+                            // Run the wp_insert_attachment function. This adds the file to the media library and generates the thumbnails. If you wanted to attch this image to a post, you could pass the post id as a third param and it'd magically happen.
+                            $attach_id = wp_insert_attachment( $attachment, $file_name_and_location );
+                            require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+                            $attach_data = wp_generate_attachment_metadata( $attach_id, $file_name_and_location );
+                            wp_update_attachment_metadata($attach_id,  $attach_data);
+                            // Before we update the post meta, trash any previously uploaded image for this post.
+                            // You might not want this behavior, depending on how you're using the uploaded images.
+                            // $existing_uploaded_image = (int) get_post_meta($post_id,'_xxxx_attached_image', true);
+                            // if(is_numeric($existing_uploaded_image)) {
+                            //     wp_delete_attachment($existing_uploaded_image);
+                            // }
+                            // Now, update the post meta to associate the new image with the post
+                            update_post_meta($post_id,'_xxxx_attached_image',$attach_id);
+                            // Set the feedback flag to false, since the upload was successful
+                            $upload_feedback = false;
+                        } else { // wp_handle_upload returned some kind of error. the return does contain error details, so you can use it here if you want.
+                            $upload_feedback = 'There was a problem with your upload.';
+                            update_post_meta($post_id,'_xxxx_attached_image',$attach_id);
+                        }
+                    } else { // wrong file type
+                        $upload_feedback = 'Please upload only image files (jpg, gif or png).';
+                        update_post_meta($post_id,'_xxxx_attached_image',$attach_id);
+                    }
+                } else { // No file was passed
+                    $upload_feedback = false;
+                }
+                // Update the post meta with any feedback
+                update_post_meta($post_id,'_xxxx_attached_image_upload_feedback',$upload_feedback);
 
-	// $filename should be the path to a file in the upload directory.
-	$filename = $_FILES['upload_attachment']['name'];
-	$uploadedfile = $_FILES['upload_attachment'];
-	$upload_overrides = array( 'test_form' => false );
-	//$upload_overrides = array( 'upload_attachment' => false );
-	$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-	if ( $movefile && ! isset( $movefile['error'] ) ) {
-	    //print_r( "File is valid, and was successfully uploaded.\n");
-	    //var_dump( $movefile );
+            break;
+            default:
+        } // End switch
+    return;
+} // End if manual save flag
+    return;
+}
+add_action('save_post','save_img_attachement_post',1,2);
 
-			// The ID of the post this attachment is for.
-			$parent_post_id = $post->ID;
-			// Check the type of file. We'll use this as the 'post_mime_type'.
-			$filetype = wp_check_filetype( basename( $filename ), null );
-			// Get the path to the upload directory.
-			$wp_upload_dir = wp_upload_dir();
-			// Prepare an array of post data for the attachment.
-			$attachment = array(
-				'guid'           => $wp_upload_dir['url'] . '/' . basename( $filename ),
-				'post_mime_type' => $filetype['type'],
-				'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
-				'post_content'   => '',
-				'post_status'    => 'inherit'
-			);
-			// Insert the attachment.
-			$attach_id = wp_insert_attachment( $attachment, $filename, $parent_post_id );
-			// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
-			require_once( ABSPATH . 'wp-admin/includes/image.php' );
-			// Generate the metadata for the attachment, and update the database record.
-			$attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
-			wp_update_attachment_metadata( $attach_id, $attach_data );
-			set_post_thumbnail( $parent_post_id, $attach_id );
-
-	} else {
-	    print_r( $movefile."\n");
-			print_r($uploadedfile);
-			die();
-	}
-
-	update_post_meta($post->ID, "upload_attachment", $_POST["upload_attachment"]);
-
+function save_custom(){ //sauvegarde des champs spécifiques
+// 	if ( !function_exists( 'wp_handle_upload' ) ) {
+// 			require_once( ABSPATH . 'wp-admin/includes/file.php' );
+// 	}
+	global $post;
+// 	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) { // fonction pour éviter  le vidage des champs personnalisés lors de la sauvegarde automatique
+// 		return $postID;
+// 	}
+	$post_id = $post->ID;
+// 	// post type in the passed object isn't "revision"
+// 	$post_type = $post->post_type;
+//
+// 	// Make sure our flag is in there, otherwise it's an autosave and we should bail.
+// 	if($post_id) {
+// 			// Logic to handle specific post types
+//
+// 			switch($post_type) {
+// 					// If this is a post. You can change this case to reflect your custom post slug
+// 					case 'projet':
+// 							// HANDLE THE FILE UPLOAD
+// 							// If the upload field has a file in it
+// 							if(isset($_FILES['upload_attachment']) && ($_FILES['upload_attachment']['size'] > 0)) {
+// 									// Get the type of the uploaded file. This is returned as "type/extension"
+// 									$arr_file_type = wp_check_filetype(basename($_FILES['upload_attachment']['name']));
+// 									$uploaded_file_type = $arr_file_type['type'];
+// 									// Set an array containing a list of acceptable formats
+// 									$allowed_file_types = array('image/jpg','image/jpeg','image/gif','image/png');
+// 									// If the uploaded file is the right format
+// 									if(in_array($uploaded_file_type, $allowed_file_types)) {
+// 											// Options array for the wp_handle_upload function. 'test_upload' => false
+// 											$upload_overrides = array( 'test_form' => false );
+// 											// Handle the upload using WP's wp_handle_upload function. Takes the posted file and an options array
+// 											$uploaded_file = wp_handle_upload($_FILES['upload_attachment'], $upload_overrides);
+// 											// If the wp_handle_upload call returned a local path for the image
+// 											if(isset($uploaded_file['file'])) {
+// 													// The wp_insert_attachment function needs the literal system path, which was passed back from wp_handle_upload
+// 													$file_name_and_location = $uploaded_file['file'];
+// 													// Generate a title for the image that'll be used in the media library
+// 													$file_title_for_media_library = '';
+// 													// Set up options array to add this file as an attachment
+// 													$attachment = array(
+// 															'post_mime_type' => $uploaded_file_type,
+// 															'post_title' => 'Uploaded image ' . addslashes($file_title_for_media_library),
+// 															'post_content' => '',
+// 															'post_status' => 'inherit'
+// 													);
+// 													// Run the wp_insert_attachment function. This adds the file to the media library and generates the thumbnails. If you wanted to attch this image to a post, you could pass the post id as a third param and it'd magically happen.
+// 													$attach_id = wp_insert_attachment( $attachment, $file_name_and_location );
+// 													require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+// 													$attach_data = wp_generate_attachment_metadata( $attach_id, $file_name_and_location );
+// 													wp_update_attachment_metadata($attach_id,  $attach_data);
+// 													// Before we update the post meta, trash any previously uploaded image for this post.
+// 													// You might not want this behavior, depending on how you're using the uploaded images.
+//
+// 													// $existing_uploaded_image = (int) get_post_meta($post_id,'_project_attached_image', true);
+// 													// if(is_numeric($existing_uploaded_image)) {
+// 													// 		wp_delete_attachment($existing_uploaded_image);
+// 													// }
+//
+// 													// Now, update the post meta to associate the new image with the post
+// 													update_post_meta($post_id,'_project_attached_image',$attach_id);
+// 													// Set the feedback flag to false, since the upload was successful
+// 													$upload_feedback = false;
+// 											} else { // wp_handle_upload returned some kind of error. the return does contain error details, so you can use it here if you want.
+// 													$upload_feedback = 'There was a problem with your upload.';
+// 													update_post_meta($post_id,'_project_attached_image',$attach_id);
+// 											}
+// 									} else { // wrong file type
+// 											$upload_feedback = 'Please upload only image files (jpg, gif or png).';
+// 											update_post_meta($post_id,'_project_attached_image',$attach_id);
+// 									}
+// 							} else { // No file was passed
+// 									$upload_feedback = false;
+// 							}
+// 							// Update the post meta with any feedback
+// 							update_post_meta($post_id,'_project_attached_image_upload_feedback',$upload_feedback);
+// 					break;
+// 					default:
+// 			} // End switch
+// 			return;
+// 	} // End if manual save flag
+//
+// 	//
+// 	// // $filename should be the path to a file in the upload directory.
+// 	// $filename = $_FILES['upload_attachment']['name'];
+// 	// $uploadedfile = $_FILES['upload_attachment'];
+// 	// $upload_overrides = array( 'test_form' => false );
+// 	// //$upload_overrides = array( 'upload_attachment' => false );
+// 	// $movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+// 	// if ( $movefile && ! isset( $movefile['error'] ) ) {
+// 	//     //print_r( "File is valid, and was successfully uploaded.\n");
+// 	//     //var_dump( $movefile );
+// 	//
+// 	// 		// The ID of the post this attachment is for.
+// 	// 		$parent_post_id = $post->ID;
+// 	// 		// Check the type of file. We'll use this as the 'post_mime_type'.
+// 	// 		$filetype = wp_check_filetype( basename( $filename ), null );
+// 	// 		// Get the path to the upload directory.
+// 	// 		$wp_upload_dir = wp_upload_dir();
+// 	// 		//var_dump($wp_upload_dir);
+// 	// 		//die();
+// 	// 		// Prepare an array of post data for the attachment.
+// 	// 		$attachment = array(
+// 	// 			'guid'           => $wp_upload_dir['url'] . '/' . basename( $filename ),
+// 	// 			'post_mime_type' => $filetype['type'],
+// 	// 			'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
+// 	// 			'post_content'   => '',
+// 	// 			'post_status'    => 'inherit'
+// 	// 		);
+// 	// 		// Insert the attachment.
+// 	// 		$attach_id = wp_insert_attachment( $attachment, $filename, $parent_post_id );
+// 	// 		// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
+// 	// 		require_once( ABSPATH . 'wp-admin/includes/image.php' );
+// 	// 		// Generate the metadata for the attachment, and update the database record.
+// 	// 		$attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
+// 	// 		wp_update_attachment_metadata( $attach_id, $attach_data );
+// 	// 		set_post_thumbnail( $parent_post_id, $attach_id );
+// 	//
+// 	// } else {
+// 	//     print_r( $movefile."\n");
+// 	// 		print_r($uploadedfile);
+// 	// 		die();
+// 	// }
+// 	// update_post_meta($post->ID, "upload_attachment", $_POST["upload_attachment"]);
+//
+//
 	update_post_meta($post->ID, "project_year", $_POST["project_year"]);
 	update_post_meta($post->ID, "project_type", $_POST["project_type"]);
 	update_post_meta($post->ID, "mention", $_POST["mention"]);
 	update_post_meta($post->ID, "url_projet", $_POST["url_projet"]); //enregistrement dans la base de données
 	return;
-}
+ }
 
 $labelsEleves = array(
 	'name' => _x( 'Élèves', 'post type general name' ),

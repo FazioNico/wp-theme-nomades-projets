@@ -13,34 +13,35 @@
   //print_r($post);
   // the_title( '<h1 class="entry-title">', '</h1>' );
   // get the custome meta post ( echo $customMetaPost["url_projet"][0];)
-  $existing_image_id = get_post_meta($post->ID,'_project_attached_image', true);
-  if(is_numeric($existing_image_id)) {
-      echo '<div>';
-          $arr_existing_image = wp_get_attachment_image_src($existing_image_id, 'large');
-          $existing_image_url = $arr_existing_image[0];
-          echo '<img style="width:100%" src="' . $existing_image_url . '" />';
-      echo '</div>';
-  }
-  $attachments = get_posts( array(
-      'post_type'   => 'attachment',
-      'numberposts' => -1,
-      'post_status' => null,
-      'post_parent' => $post->ID
-  ) );
-
-var_dump($attachments);
-  if ( $attachments ) {
-      foreach ( $attachments as $attachment ) {
-          ?>
-          <li><?php echo wp_get_attachment_image( $attachment->ID, 'full' ); ?>
-              <p><?php echo apply_filters( 'the_title', $attachment->post_title ); ?></p>
-          </li>
-          <?php
-      }
-  }
+  // $existing_image_id = get_post_meta($post->ID,'_project_attached_image', true);
+  // if(is_numeric($existing_image_id)) {
+  //     echo '<div>';
+  //         $arr_existing_image = wp_get_attachment_image_src($existing_image_id, 'large');
+  //         $existing_image_url = $arr_existing_image[0];
+  //         echo '<img style="width:100%" src="' . $existing_image_url . '" />';
+  //     echo '</div>';
+  // }
+  //
+//var_dump( $post);
 
 
+        $attachments = get_posts( array(
+          'post_type'      => 'attachment',
+          'posts_per_page' => 500,
+          'post_status'    => 'any',
+          'post_parent'    => $post->ID
+        ) );
+        //var_dump($attachments);
 
+        if ( $attachments ) {
+            foreach ( $attachments as $attachment ) {
+                ?>
+                <li><?php echo wp_get_attachment_image( $attachment->ID, 'full' ); ?>
+                    <p><?php echo apply_filters( 'the_title', $attachment->post_title ); ?></p>
+                </li>
+                <?php
+            }
+        }
 
 
   $customMetaPost = get_post_custom($post->ID);

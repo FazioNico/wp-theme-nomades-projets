@@ -48,6 +48,7 @@
           	'orderby'   =>  array( 'meta_value_num' => 'ASC', 'title' => 'ASC' ),
           	'meta_key'  => 'mention'
           );
+
           query_posts($projects_query);
           while ( have_posts() ) : the_post();
               $customMetaPost = get_post_custom($post->ID);
