@@ -13,7 +13,13 @@ var gulp              = require('gulp'),
     stripCssComments  = require('gulp-strip-css-comments'),
     autoprefixer      = require('gulp-autoprefixer'),
     useref            = require('gulp-useref'),
-    sourcemaps        = require('gulp-sourcemaps');
+    sourcemaps        = require('gulp-sourcemaps'),
+
+    babel = require('gulp-babel'),
+    babelify = require('babelify'),
+    browserify = require("browserify"),
+    transform = require('vinyl-transform'),
+    source = require('vinyl-source-stream');
 
 // Config
 var path = {
@@ -75,7 +81,18 @@ gulp.task('js', function() {
     .pipe(gulp.dest(path.desDir + 'js/'))
     .pipe(reload({stream:true}));
 });
-
+// Task to build JS files
+gulp.task("ES6-js", function(){
+    return browserify(path.js +'/main.js',{
+        debug: true
+    })
+    .transform(babelify.configure({
+        presets : ["es2015"]
+    }))
+    .bundle()
+    .pipe(source("bundle.js"))
+    .pipe(gulp.dest(path.desDir + 'js/'));
+});
 // Task to copy *.php files in desDir
 gulp.task('php', function () {
   return gulp.src(['./**/*.php', './template-parts/*.php'])
@@ -111,10 +128,11 @@ gulp.task('browser-sync', function() {
  gulp.task('watch', function() {
   gulp.watch('./**/*.php', ['php']);
   gulp.watch('./template-parts/*.php', ['php']);
-  gulp.watch('./js/*.js', ['js']);
+  //gulp.watch('./js/*.js', ['js']);
+  gulp.watch('./js/*.js', ['ES6-js']);
   gulp.watch('./style.css', ['css']); 
   gulp.watch('./sass/**/*.scss', ['sass']); 
 });
 
 // Task to watch change and reload
-gulp.task('default', ['bowerDependencies', 'sass','browser-sync', 'js', 'css', 'php', 'img', 'watch']);
+gulp.task('default', ['bowerDependencies', 'sass','browser-sync', 'ES6-js', 'css', 'php', 'img', 'watch']);
