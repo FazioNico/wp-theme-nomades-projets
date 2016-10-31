@@ -90,8 +90,9 @@ gulp.task("ES6-js", function(){
         presets : ["es2015"]
     }))
     .bundle()
-    .pipe(source("bundle.js"))
-    .pipe(gulp.dest(path.desDir + 'js/'));
+    .pipe(source("app.min.js"))
+    .pipe(gulp.dest(path.desDir + 'js/'))
+    .pipe(reload({stream:true}));
 });
 // Task to copy *.php files in desDir
 gulp.task('php', function () {

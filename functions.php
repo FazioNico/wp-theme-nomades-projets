@@ -175,7 +175,7 @@ function projet_module() {
 add_action('init', 'projet_module');
 
 function admin_init(){ //initialisation des champs spécifiques
-	 wp_enqueue_script( 'gulp-javascript', get_template_directory_uri() . '/js/app.min.js', array(), '20151215', true );
+	 wp_enqueue_script( 'gulp-javascript', get_template_directory_uri() . '/js/app.min.js', array(), true );
 	 add_meta_box("url_projet", "Url du projet", "url_projet", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction url_projet()
 	 add_meta_box("project_type", "Type de Projet", "project_type", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction mention()
 
