@@ -42,7 +42,11 @@
                 <?php
             }
         }
-
+        // if ( has_post_thumbnail( $_post->ID ) ) {
+        //     echo '<a href="' . get_permalink( $_post->ID ) . '" title="' . esc_attr( $_post->post_title ) . '">';
+        //     echo get_the_post_thumbnail( $_post->ID, 'thumbnail' );
+        //     echo '</a>';
+        // }
 
   $customMetaPost = get_post_custom($post->ID);
   $mention = $customMetaPost["mention"][0];
