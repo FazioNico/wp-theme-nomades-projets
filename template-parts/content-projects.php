@@ -25,28 +25,13 @@
 //var_dump( $post);
 
 
-        $attachments = get_posts( array(
-          'post_type'      => 'attachment',
-          'posts_per_page' => 500,
-          'post_status'    => 'any',
-          'post_parent'    => $post->ID
-        ) );
-        //var_dump($attachments);
-
-        if ( $attachments ) {
-            foreach ( $attachments as $attachment ) {
-                ?>
-                <li><?php echo wp_get_attachment_image( $attachment->ID, 'full' ); ?>
-                    <p><?php echo apply_filters( 'the_title', $attachment->post_title ); ?></p>
-                </li>
-                <?php
-            }
-        }
-        // if ( has_post_thumbnail( $_post->ID ) ) {
-        //     echo '<a href="' . get_permalink( $_post->ID ) . '" title="' . esc_attr( $_post->post_title ) . '">';
-        //     echo get_the_post_thumbnail( $_post->ID, 'thumbnail' );
-        //     echo '</a>';
-        // }
+  $attachments = get_posts( array(
+    'post_type'      => 'attachment',
+    'posts_per_page' => 500,
+    'post_status'    => 'any',
+    'post_parent'    => $post->ID
+  ) );
+  //var_dump($attachments);
 
   $customMetaPost = get_post_custom($post->ID);
   $mention = $customMetaPost["mention"][0];
@@ -86,14 +71,18 @@
       <div class="col col-sm-8">
         <div class="entry-content">
           <?php
+            if ( $attachments ) {
+              foreach ( $attachments as $attachment ) {
+                print('
+                  <div class="thumb-projet img-responsive" >
+                    <a class="text-primary" href="'.$url_pageProjet.'" title="projet">
+                      <img src="'.wp_get_attachment_image_src( $attachment->ID, 'full' )[0].'" alt="Projet de '.$eleve.'" />
+                    </a>
+                  </div>
+                ');
+              }
+            }
             //the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' );
-            print('
-              <div class="thumb-projet img-responsive" >
-                <a class="text-primary" href="'.$url_pageProjet.'" title="projet">
-                  <img src="'.$imgURL.'" alt="Projet de '.$eleve.'" />
-                </a>
-              </div>
-            ');
           ?>
         </div>
       </div>
