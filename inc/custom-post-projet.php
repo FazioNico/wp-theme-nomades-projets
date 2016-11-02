@@ -178,7 +178,6 @@ function delete_attachment( $post ) {
     if( wp_delete_attachment( $_POST['att_ID'], true )) {
         echo $msg;
     }
-    die();
 }
 
 function save_attachement(){
