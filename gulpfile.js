@@ -131,6 +131,7 @@ gulp.task('browser-sync', function() {
   gulp.watch('./template-parts/*.php', ['php']);
   //gulp.watch('./js/*.js', ['js']);
   gulp.watch('./js/*.js', ['ES6-js']);
+  gulp.watch('./js/**/*.js', ['ES6-js']);
   gulp.watch('./style.css', ['css']); 
   gulp.watch('./sass/**/*.scss', ['sass']); 
 });
