@@ -34,12 +34,13 @@ export class ProjectPostType {
         break;
       case 'wp':
         //new WpProject();
+        document.getElementById('controle-project_type').innerHTML = project_type;
         break;
       case 'atypique':
         //new AtypikProject();
+        document.getElementById('controle-project_type').innerHTML = project_type;
         break;
     }
-    document.getElementById('controle-project_type').innerHTML = project_type;
   }
 
   deleteAttachmentImg(event){
