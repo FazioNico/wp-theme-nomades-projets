@@ -75,6 +75,9 @@ function field_project_type(){     //La fonction qui affiche notre champs person
 		<input type="radio" name="project_type" <?php if($project_type === 'static'){echo 'checked';}?> value="static">Static<br />
 		<input type="radio" name="project_type" <?php if($project_type === 'atypique'){echo 'checked';}?> value="atypique">Atypique
 	</p>
+	<div id="controle-project_type">
+		
+	</div>
 	<?php
 }
 
