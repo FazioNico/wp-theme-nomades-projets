@@ -162,7 +162,7 @@ function field_url_projet(){     //La fonction qui affiche notre champs personna
 	$custom = get_post_custom($post->ID); //fonction pour récupérer la valeur de notre champ
 	$url_projet = $custom["url_projet"][0];
 	?>
-	<input size="70" type="text" value="<?php echo $url_projet;?>" name="url_projet"/>
+	<input size="50" type="text" value="<?php echo $url_projet;?>" name="url_projet"/>
 	<?php
 }
 
