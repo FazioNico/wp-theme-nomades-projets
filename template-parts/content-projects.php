@@ -57,35 +57,43 @@
   //var_dump($mention);
   //var_dump($project_year);
   //var_dump($eleve);
+
   ?>
   <article class="">
     <div class="row">
       <div class="col col-sm-4">
         <div class="entry-content">
           <?php
-            print_r($eleve.'<br/>');
-            the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' );
+            (!empty($mentionTitle) ? print_r($mentionTitle.'<br/>') : '');
+            (!empty($eleve) ? print_r($eleve.'<br/>') : '');
+            (!empty($url_pageProjet) ? the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' ) : '');
           ?>
         </div>
       </div>
       <div class="col col-sm-8">
         <div class="entry-content">
-          <?php
-            if ( $attachments ) {
-              foreach ( $attachments as $attachment ) {
-                print('
-                  <div class="thumb-projet img-responsive" >
-                    <a class="text-primary" href="'.$url_pageProjet.'" title="projet">
-                      <img src="'.wp_get_attachment_image_src( $attachment->ID, 'full' )[0].'" alt="Projet de '.$eleve.'" />
-                    </a>
-                  </div>
-                ');
+          <div class="attachments row">
+            <?php
+              $counter = 0;
+              if ( $attachments ) {
+                foreach ( $attachments as $attachment ) {
+                  ++$counter;
+                  if($counter <= 3){
+                    print('
+                      <div class="thumb-projet col col-sm-4" >
+                        <a class="text-primary" href="'.$url_pageProjet.'" title="projet">
+                          <img class="img-responsive" src="'.wp_get_attachment_image_src( $attachment->ID, 'full' )[0].'" alt="Projet de '.$eleve.'" />
+                        </a>
+                      </div>
+                    ');
+                  }
+                }
               }
-            }
-            //the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' );
-          ?>
-        </div>
-      </div>
-    </div>
+              //the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' );
+            ?>
+          </div><!--  Eof .attachments -->
+        </div><!--  Eof .entry-content -->
 
+      </div><!--  Eof .col-sm-8 -->
+    </div><!--  Eof .row -->
   </article>

@@ -45,26 +45,7 @@ get_header(); ?>
       		if ( have_posts() ) :
       			/* Start the Loop */
       			while ( have_posts() ) : the_post();
-              $customMetaPost = get_post_custom($post->ID);
-              $mention = $customMetaPost["mention"][0];
-              switch ($mention) {
-                case 0:
-                  print_r('Travaux non certifiés '.$mention);
-                  get_template_part('template-parts/content', 'projects');
-                  break;
-                case 1:
-                  print_r('Certification '.$mention);
-                  get_template_part('template-parts/content', 'projects');
-                  break;
-                case 2:
-                  print_r('Mention Bien '.$mention);
-                  get_template_part('template-parts/content', 'projects');
-                  break;
-                case 3:
-                  print_r('Mention Très Bien '.$mention);
-                  get_template_part('template-parts/content', 'projects');
-                  break;
-              }
+              get_template_part('template-parts/content', 'projects');
       			endwhile;
       			the_posts_navigation();
       		else :
