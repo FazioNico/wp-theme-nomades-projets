@@ -1,4 +1,8 @@
 
+import  { StaticProject } from '../../components/static-project/static-project';
+//import  { WpProject } from '../../components/wp-project/wp-project';
+//import  { AtypikProject } from '../../components/atypik-project/atypik-project';
+
 export class ProjectPostType {
 
   constructor(){
@@ -26,13 +30,13 @@ export class ProjectPostType {
     });
     switch (project_type) {
       case 'static':
-        console.log(project_type)
+        new StaticProject();
         break;
       case 'wp':
-        console.log(project_type)
+        //new WpProject();
         break;
       case 'atypique':
-        console.log(project_type)
+        //new AtypikProject();
         break;
     }
     document.getElementById('controle-project_type').innerHTML = project_type;

@@ -1,5 +1,5 @@
 
-import  { ProjectPostType } from './custom-post/project/project'
+import  { ProjectPostType } from './custom-post/project/project';
 
 class App{
 
