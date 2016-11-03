@@ -19,3 +19,12 @@ main, section, article {
 @import "headings";
 
 @import "copy";
+
+
+
+.lighten-text {
+	color: $color__secondary;
+}
+.darken-text {
+	color: $color__secondary_darken;
+}

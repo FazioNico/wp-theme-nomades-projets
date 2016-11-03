@@ -64,8 +64,8 @@
       <div class="col col-sm-4">
         <div class="entry-content">
           <?php
-            (!empty($mentionTitle) ? print_r($mentionTitle.'<br/>') : '');
-            (!empty($eleve) ? print_r($eleve.'<br/>') : '');
+            (!empty($mentionTitle) ? print_r('<span class="lighten-text">'.$mentionTitle.'</span><br/>') : '');
+            (!empty($eleve) ? print_r('<span class="darken-text">'.$eleve.'</span><br/>') : '');
             (!empty($url_pageProjet) ? the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' ) : '');
           ?>
         </div>
