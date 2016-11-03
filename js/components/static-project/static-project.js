@@ -1,8 +1,11 @@
+import  { WpAjaxCallService } from '../../providers/wp-ajax/wp-ajax'
 
 export class StaticProject{
 
   constructor(){
+    this.wpAjax = new WpAjaxCallService();
     console.log('Hello static project!')
+    console.log(this.wpAjax)
     this.selector = document.getElementById('controle-project_type');
     this.$input = jQuery('input[name=url_projet]')
     this.localFolder = 'projects-eleves'
@@ -41,13 +44,15 @@ export class StaticProject{
         'projectPath': distantFolderInput.split('~')[1].split('/').reverse()[1]
       }
       let localFolder = Object.keys(pathName).map(key => pathName[key])
-      let action = 'copyDistantFolder';
+      let action = 'copy_distant_folder';
       this.localFolder = this.localFolder + '/' + localFolder.join('/')+'/';
       // add folder value to input[name=url_projet]
       this.$input.val(this.localFolder)
 
       // Ajax call to WP Action API ->
-      console.info({'action-> ': action, 'folder-> ': this.localFolder })
+      //console.info({'action-> ': action, 'params-> ': this.localFolder })
+      //this.ajaxCall({'action': action, 'params': this.localFolder });
+      this.wpAjax.ajaxCall({'action': action, 'params': this.localFolder });
     }
     else{
       console.warn("Les critères ne parsing de l'URL distante ne sont pas respectés (~ /)");
@@ -55,6 +60,19 @@ export class StaticProject{
 
   }
 
+  ajaxCall(data){
+    jQuery.ajax({
+  		url : ajaxurl,
+  		type : 'post',
+  		data : {
+  			action : data.action,
+  			params : data.params
+  		},
+  		success : function( response ) {
+  			alert(response)
+  		}
+  	});
+  }
   /* Class View Methode */
   defaultSeleletonUI(){
     return `

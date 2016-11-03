@@ -148,6 +148,13 @@ require get_template_directory() . '/inc/jetpack.php';
 require get_template_directory() . '/inc/custom-post-projet.php';
 /** ----------------------------------------------------------------------- */
 
+/**
+ * Load Ajax WP call action.
+ */
+require get_template_directory() . '/inc/ajax-wp-call-action.php';
+/** ----------------------------------------------------------------------- */
+
+
 //// Bof - Add menu location
 function register_my_menus() {
   register_nav_menus(
