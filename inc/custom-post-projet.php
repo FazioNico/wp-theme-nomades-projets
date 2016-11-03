@@ -21,11 +21,11 @@ function projet_module() {
 	 'hierarchical' => false,
 	 'rewrite' => array("slug" => "projets"),
 	 'query_var' => "projets", // This goes to the WP_Query schema
-	 'supports' => array('title', 'thumbnail', 'page-attributes'), //titre + zone de texte + champs personnalisés + miniature valeur possible : 'title','editor','author','thumbnail','excerpt', 'page-attributes'
+	 'supports' => array('title', 'page-attributes'), //titre + zone de texte + champs personnalisés + miniature valeur possible : 'title','editor','author','thumbnail','excerpt', 'page-attributes'
 	 'taxonomies' => array('category')
 	 );
 	 register_post_type( 'projet' , $args ); // enregistrement de l'entité projet basé sur les arguments ci-dessus
-	 register_taxonomy_for_object_type('post_tag', 'projet','show_tagcloud=1&hierarchical=false'); // ajout des mots clés pour notre custom post type
+	 //register_taxonomy_for_object_type('post_tag', 'projet','show_tagcloud=1&hierarchical=false'); // ajout des mots clés pour notre custom post type
 
 	 add_action( 'wp_ajax_delete_attachment', 'delete_attachment' );
 	 add_action('save_post','save_attachement',1,2); // used  for single/multiple file upload
@@ -76,7 +76,7 @@ function field_project_type(){     //La fonction qui affiche notre champs person
 		<input type="radio" name="project_type" <?php if($project_type === 'atypique'){echo 'checked';}?> value="atypique">Atypique
 	</p>
 	<div id="controle-project_type">
-		
+
 	</div>
 	<?php
 }
