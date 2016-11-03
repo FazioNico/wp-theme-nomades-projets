@@ -7,6 +7,7 @@ export class ProjectPostType {
 
   constructor(){
     console.log('hello ProjectPostType!')
+    jQuery('#field_url_projet').css({'display': 'none'})
     this.loadEventUI();
   }
 
