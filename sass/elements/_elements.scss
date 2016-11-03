@@ -1,6 +1,6 @@
 html {
 	box-sizing: border-box;
-	background: blue;
+	// background: blue;
 }
 
 *,
@@ -11,6 +11,7 @@ html {
 
 body {
 	background: $color__background-body; /* Fallback for when there is no custom background color defined. */
+	padding-bottom: 80px;
 }
 
 article, header.section, section {
