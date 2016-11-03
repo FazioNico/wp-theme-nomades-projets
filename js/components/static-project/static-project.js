@@ -5,7 +5,6 @@ export class StaticProject{
   constructor(){
     this.wpAjax = new WpAjaxCallService();
     console.log('Hello static project!')
-    console.log(this.wpAjax)
     this.selector = document.getElementById('controle-project_type');
     this.$input = jQuery('input[name=url_projet]')
     this.localFolder = 'projects-eleves'
