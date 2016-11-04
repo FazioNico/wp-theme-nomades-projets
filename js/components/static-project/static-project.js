@@ -28,7 +28,9 @@ export class StaticProject{
   }
 
   loadEventUI(){
-    document.getElementById('copyDistantFolder').addEventListener('click', this.copyDistantFolder.bind(this))
+    if(document.getElementById('copyDistantFolder')){
+      document.getElementById('copyDistantFolder').addEventListener('click', event => this.copyDistantFolder, false)  
+    }
   }
 
   /* Event Methode */
