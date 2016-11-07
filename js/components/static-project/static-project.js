@@ -2,9 +2,10 @@ import  { WpAjaxCallService } from '../../providers/wp-ajax/wp-ajax'
 
 export class StaticProject{
 
-  constructor(){
-    this.wpAjax = new WpAjaxCallService();
+  constructor(wpAjax = WpAjaxCallService){
+
     console.log('Hello static project!')
+    this.wpAjax = new WpAjaxCallService();
     this.selector = document.getElementById('controle-project_type');
     this.$input = jQuery('input[name=url_projet]')
     this.localFolder = 'projects-eleves'
@@ -29,7 +30,7 @@ export class StaticProject{
 
   loadEventUI(){
     if(document.getElementById('copyDistantFolder')){
-      document.getElementById('copyDistantFolder').addEventListener('click', event => this.copyDistantFolder, false)  
+          document.getElementById('copyDistantFolder').addEventListener('click', this.copyDistantFolder.bind(this))
     }
   }
 
@@ -61,6 +62,19 @@ export class StaticProject{
 
   }
 
+  ajaxCall(data){
+    jQuery.ajax({
+  		url : ajaxurl,
+  		type : 'post',
+  		data : {
+  			action : data.action,
+  			params : data.params
+  		},
+  		success : function( response ) {
+  			alert(response)
+  		}
+  	});
+  }
   /* Class View Methode */
   defaultSeleletonUI(){
     return `
