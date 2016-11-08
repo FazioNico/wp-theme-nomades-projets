@@ -10,7 +10,9 @@ function copy_distant_folder() {
   //$rootPath = explode("/wp", get_site_url()); // for PROD (http server)
   $rootPath = $_SERVER['DOCUMENT_ROOT']."/"; // for DEV (localhost)
   // 2 Create de $path we need
-  $path = $rootPath.$_POST['params'];
+  $path = $rootPath.$_POST['params']['folder'];
+  $password = $_POST['params']['password'];
+  $userName = explode('/', $_POST['params']['folder'])[1];
   // 3 Check if $path existe
   if(file_exists($path)){
     echo 'project dir exist! ';
@@ -22,42 +24,41 @@ function copy_distant_folder() {
     }
     // 5 copy distant files into the created $path
     // TODO --
+    copyFolder($path,$userName,$password);
     // 6 returne the result
     $copyResult = 1;
     $result = $copyResult;
   }
   //print_r($path);
-  print_r('result-> '.$result);
+  //print_r('path-> '.$path);
+  //print_r('params-> '.$_POST['params']);
+  print_r('pwd-> '.$password."\n");
+  print_r('result-> '.$result."\n");
 	die();
 }
 
-function copyFolder(){
+function copyFolder($path,$userName,$password){
   /* Source File Name and Path */
-  $remote_file = 'files.zip';
-
+  $remote_file = 'public_html/exercice05ajax/index.html';
   /* FTP Account */
-  $ftp_host = 'http://ateliers.nomades.ch/'; /* host */
-  $ftp_user_name = 'fazio@ateliers.nomades.ch'; /* username */
-  $ftp_user_pass = 'nicfaz'; /* password */
-
+  $ftp_host = 'ateliers.nomades.ch'; /* host */
+  $ftp_user_name = $userName; /* username */
+  $ftp_user_pass = $password; /* password */
 
   /* New file name and path for this file */
-  $local_file = 'files.zip';
+  $local_file =$path.'index.html';
 
   /* Connect using basic FTP */
   $connect_it = ftp_connect( $ftp_host );
-
   /* Login to FTP */
   $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
-
   /* Download $remote_file and save to $local_file */
   if ( ftp_get( $connect_it, $local_file, $remote_file, FTP_BINARY ) ) {
-      echo "WOOT! Successfully written to $local_file\n";
+      print_r( "WOOT! Successfully written to $local_file\n");
   }
   else {
-      echo "Doh! There was a problem\n";
+      print_r( "Doh! There was a problem\n");
   }
-
   /* Close the connection */
   ftp_close( $connect_it );
 }

@@ -40,7 +40,13 @@ export class StaticProject{
     event.preventDefault();
     // URL for testing: http://ateliers.nomades.ch/~fazio/exercice05ajax/
     let distantFolderInput = document.getElementById('distantURL').value;
-    if(distantFolderInput.length > 1 && distantFolderInput.indexOf("~")>0 && distantFolderInput.indexOf("/")>0 ){
+    let pwd = document.getElementById('serverPWD').value;
+    if(
+      distantFolderInput.length > 1
+      && distantFolderInput.indexOf("~")>0
+      && distantFolderInput.indexOf("/")>0
+      && pwd.length >=3
+    ){
       let pathName = {
         'userPath': distantFolderInput.split('~')[1].split('/')[0],
         'projectPath': distantFolderInput.split('~')[1].split('/').reverse()[1]
@@ -54,7 +60,8 @@ export class StaticProject{
       // Ajax call to WP Action API ->
       //console.info({'action-> ': action, 'params-> ': this.localFolder })
       //this.ajaxCall({'action': action, 'params': this.localFolder });
-      this.wpAjax.ajaxCall({'action': action, 'params': this.localFolder });
+      let params = {'folder': this.localFolder, 'password': pwd };
+      this.wpAjax.ajaxCall({'action': action, 'params': params});
     }
     else{
       console.warn("Les critères ne parsing de l'URL distante ne sont pas respectés (~ /)");
@@ -83,6 +90,7 @@ export class StaticProject{
         Copier le dossier distant du projet de l'élève dans le répértoir des projets copier:
       </p>
       <input style="width: 100%;" type="text" name="distantURL" id="distantURL" value="" placeholder="http://ateliers.nomades.ch/~eleve/dossier-de-projet/"><br/>
+      <input style="width:60%;" type="text" name="serverPWD" id="serverPWD" value="" placeholder="mot de pass du profil de l'élève"><br/>
       <button id="copyDistantFolder">Copier le projet de l'élève</button>
     `;
   }
