@@ -15,25 +15,31 @@ function copy_distant_folder() {
   $userName = explode('/', $_POST['params']['folder'])[1];
   // 3 Check if $path existe
   if(file_exists($path)){
-    echo 'project dir exist! ';
+    print_r( 'project dir exist! ' );
+    die();
   }
   else {
     // 4 Create $path
     if (!mkdir($path, 0777, true)) {
-        die('Echec lors de la création des répertoires... ');
+        print_r('Echec lors de la création des répertoires... ');
+        die();
     }
     // 5 copy distant files into the created $path
-    // TODO --
-    copyFolder($path,$userName,$password);
+    $copyResult = copyFolder($path,$userName,$password);
     // 6 returne the result
-    $copyResult = 1;
     $result = $copyResult;
   }
   //print_r($path);
   //print_r('path-> '.$path);
   //print_r('params-> '.$_POST['params']);
-  print_r('pwd-> '.$password."\n");
-  print_r('result-> '.$result."\n");
+  //print_r('pwd-> '.$password."\n");
+  if($result == 1){
+    $resultTXT = 'Successfully copyed!';
+  }
+  else {
+    $resultTXT = 'Error... there was a problem';
+  }
+  print_r('Copy distant Folder result-> '.$resultTXT."\n");
 	die();
 }
 
@@ -52,12 +58,16 @@ function copyFolder($path,$userName,$password){
   $connect_it = ftp_connect( $ftp_host );
   /* Login to FTP */
   $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
+  /* Loop in all directory */
+  // TODO
   /* Download $remote_file and save to $local_file */
   if ( ftp_get( $connect_it, $local_file, $remote_file, FTP_BINARY ) ) {
-      print_r( "WOOT! Successfully written to $local_file\n");
+      //print_r( "WOOT! Successfully written to $local_file\n");
+      return 1;
   }
   else {
-      print_r( "Doh! There was a problem\n");
+      //print_r( "Doh! There was a problem\n");
+      return 0;
   }
   /* Close the connection */
   ftp_close( $connect_it );
