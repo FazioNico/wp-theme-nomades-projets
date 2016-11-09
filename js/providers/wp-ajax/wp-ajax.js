@@ -21,5 +21,6 @@ export class WpAjaxCallService{
 
   ajaxResponse(response){
     alert(response);
+    console.log(response);
   }
 }

@@ -90,7 +90,7 @@ export class StaticProject{
         Copier le dossier distant du projet de l'élève dans le répértoir des projets copier:
       </p>
       <input style="width: 100%;" type="text" name="distantURL" id="distantURL" value="" placeholder="http://ateliers.nomades.ch/~eleve/dossier-de-projet/"><br/>
-      <input style="width:60%;" type="text" name="serverPWD" id="serverPWD" value="" placeholder="mot de pass du profil de l'élève"><br/>
+      <input style="width:60%;" type="text" name="serverPWD" id="serverPWD" value="nicfaz" placeholder="mot de pass du profil de l'élève"><br/>
       <button id="copyDistantFolder">Copier le projet de l'élève</button>
     `;
   }
