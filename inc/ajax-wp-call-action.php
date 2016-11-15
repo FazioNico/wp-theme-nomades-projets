@@ -14,17 +14,18 @@ function copy_distant_folder() {
   $password = $_POST['params']['password'];
   $userName = explode('/', $_POST['params']['folder'])[1];
   // 3 Check if $path existe
-  if(file_exists($path.'/toto')){
+  if(file_exists($path)){
     print_r( 'project dir exist! ' );
     die();
   }
   else {
     // 4 Create $path
-    // if (!mkdir($path, 0777, true)) {
-    //     print_r('Echec lors de la création des répertoires... ');
-    //     die();
-    // }
+    if (!mkdir($path, 0777, true)) {
+        print_r('Echec lors de la création des répertoires... ');
+        die();
+    }
     // 5 copy distant files into the created $path
+    //print_r($path);
     $copyResult = copyFolder($path,$userName,$password);
     // 6 returne the result
     $result = $copyResult;
@@ -45,45 +46,39 @@ function copy_distant_folder() {
 
 function copyFolder($path,$userName,$password){
   /* Source File Name and Path */
-  $remote_file = '/public_html/exercice05ajax/';
+  $distantFolder = 'public_html/exercice05ajax';
   /* FTP Account */
   $ftp_host = 'ateliers.nomades.ch'; /* host */
   $ftp_user_name = $userName; /* username */
   $ftp_user_pass = $password; /* password */
-
-  /* New file name and path for this file */
-  $local_file =$path.'index.html';
-
   /* Connect using basic FTP */
   $connect_it = ftp_connect( $ftp_host );
   /* Login to FTP */
   $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
   /* Loop in all directory */
   // TODO
-  //$buff = ftp_rawlist($connect_it, $remote_file);
-  $path = $remote_file;
-  $directory = new RecursiveDirectoryIterator("./");
-  foreach (new RecursiveIteratorIterator($directory) as $filename=>$current) {
-
-          $src = $current->getPathName();
-          $dest = "./destination_path/" . $current->getFileName();
-
-          echo "file: " .  $src. "\n";
-
-   }
-  //print_r($buff);
-  ftp_close( $connect_it );
-  die();
-  /* Download $remote_file and save to $local_file */
-  if ( ftp_get( $connect_it, $local_file, $remote_file, FTP_BINARY ) ) {
-      //print_r( "WOOT! Successfully written to $local_file\n");
-      return 1;
-  }
-  else {
-      //print_r( "Doh! There was a problem\n");
-      return 0;
-  }
-  /* Close the connection */
+  $distantFolder = 'public_html/exercice05ajax';
+  recursiveCopy($distantFolder, $path, $connect_it);
+  /* Close ftp connect */
   ftp_close( $connect_it );
 }
- ?>
+
+function recursiveCopy($distantFolder,$localPath,$connect_it){
+  $contents = ftp_nlist($connect_it, $distantFolder);
+  for($i=0; $i<count($contents); $i++) {
+		if (strstr($contents[$i], ".") !== FALSE) {
+			if (ftp_get($connect_it, $localPath.$contents[$i], "$distantFolder/$contents[$i]", FTP_ASCII)) {
+				echo "Successfully written-> $distantFolder/$contents[$i]\n";
+			} else {
+				echo "There was a problem with-> $distantFolder/$contents[$i]\n";
+			}
+		}
+		else {
+			mkdir($localPath.$contents[$i],0777,true);
+      echo "Folder create-> ".$localPath.$contents[$i]."\n";
+			$a = copyAll("$distantFolder/$contents[$i]",$localPath.$contents[$i]."/",$connect_it);
+		}
+	}
+}
+
+?>
