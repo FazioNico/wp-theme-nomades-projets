@@ -24,6 +24,7 @@ export class StaticProject{
     }
     else {
       console.log('->', this.$input.val())
+      this.localFolder = this.$input.val()
       this.selector.innerHTML = this.SeleletonUI();
     }
   }
