@@ -13,6 +13,9 @@ function copy_distant_folder() {
   $path = $rootPath.$_POST['params']['folder'];
   $password = $_POST['params']['password'];
   $userName = explode('/', $_POST['params']['folder'])[1];
+  $projectFolder = 'public_html/'.explode('/', $_POST['params']['folder'])[2];
+  //print_r($projectFolder);
+  //die();
   // 3 Check if $path existe
   if(file_exists($path)){
     print_r( 'project dir exist! ' );
@@ -25,8 +28,7 @@ function copy_distant_folder() {
         die();
     }
     // 5 copy distant files into the created $path
-    //print_r($path);
-    $copyResult = copyFolder($path,$userName,$password);
+    $copyResult = copyFolder($path,$projectFolder,$userName,$password);
     // 6 returne the result
     $result = $copyResult;
   }
@@ -44,9 +46,9 @@ function copy_distant_folder() {
 	die();
 }
 
-function copyFolder($path,$userName,$password){
+function copyFolder($path,$remotePath,$userName,$password){
   /* Source File Name and Path */
-  $distantFolder = 'public_html/exercice05ajax';
+  $distantFolder = $remotePath;
   /* FTP Account */
   $ftp_host = 'ateliers.nomades.ch'; /* host */
   $ftp_user_name = $userName; /* username */
@@ -57,13 +59,18 @@ function copyFolder($path,$userName,$password){
   $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
   /* Loop in all directory */
   // TODO
-  $distantFolder = 'public_html/exercice05ajax';
-  recursiveCopy($distantFolder, $path, $connect_it);
+  if($_SERVER['SERVER_NAME'] == 'localhost'){
+    localRecursiveCopy($distantFolder, $path, $connect_it);
+  }
+  else {
+    prodRecursiveCopy($distantFolder, $path, $connect_it);
+  }
+
   /* Close ftp connect */
   ftp_close( $connect_it );
 }
 
-function recursiveCopy($distantFolder,$localPath,$connect_it){
+function localRecursiveCopy($distantFolder,$localPath,$connect_it){
   $contents = ftp_nlist($connect_it, $distantFolder);
   for($i=0; $i<count($contents); $i++) {
 		if (strstr($contents[$i], ".") !== FALSE) {
@@ -76,9 +83,12 @@ function recursiveCopy($distantFolder,$localPath,$connect_it){
 		else {
 			mkdir($localPath.$contents[$i],0777,true);
       echo "Folder create-> ".$localPath.$contents[$i]."\n";
-			$a = copyAll("$distantFolder/$contents[$i]",$localPath.$contents[$i]."/",$connect_it);
+			$a = localRecursiveCopy("$distantFolder/$contents[$i]",$localPath.$contents[$i]."/",$connect_it);
 		}
 	}
 }
 
+function prodRecursiveCopy($distantFolder, $path, $connect_it){
+  print_r('TODO');
+}
 ?>
