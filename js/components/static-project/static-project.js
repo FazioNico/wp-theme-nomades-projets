@@ -70,19 +70,6 @@ export class StaticProject{
 
   }
 
-  ajaxCall(data){
-    jQuery.ajax({
-  		url : ajaxurl,
-  		type : 'post',
-  		data : {
-  			action : data.action,
-  			params : data.params
-  		},
-  		success : function( response ) {
-  			alert(response)
-  		}
-  	});
-  }
   /* Class View Methode */
   defaultSeleletonUI(){
     return `
