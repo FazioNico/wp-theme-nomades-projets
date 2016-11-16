@@ -2,6 +2,10 @@
 add_action( 'wp_ajax_nopriv_copy_distant_folder', 'copy_distant_folder' );
 add_action( 'wp_ajax_copy_distant_folder', 'copy_distant_folder' );
 
+add_action( 'wp_ajax_nopriv_delete_local_folder', 'delete_local_folder' );
+add_action( 'wp_ajax_delete_local_folder', 'delete_local_folder' );
+
+/* copy_distant_folder() Ajax Call function */
 function copy_distant_folder() {
   global $post;
   $result = 0;
@@ -90,5 +94,35 @@ function localRecursiveCopy($distantFolder,$localPath,$connect_it){
 
 function prodRecursiveCopy($distantFolder, $path, $connect_it){
   print_r('TODO');
+}
+
+
+/* delete_local_folder() Ajax Call function */
+function delete_local_folder() {
+  global $post;
+  $result = 0;
+  $params = $_POST['params']['folder'];
+  if(substr($params, -1)== '/'){
+    $params = substr($params, 0,-1);
+  }
+  // 1. define root website
+  //$rootPath = explode("/wp", get_site_url()); // for PROD (http server)
+  $rootPath = $_SERVER['DOCUMENT_ROOT']."/"; // for DEV (localhost)
+  $path = $rootPath.$params;
+
+  if (is_dir($path)) {
+      print_r(delTree($path));
+  }
+  print_r('path ? ->'.is_dir($path));
+  //print_r("Folder to delete-> $path");
+  die();
+}
+
+function delTree($dir) {
+   $files = array_diff(scandir($dir), array('.','..'));
+    foreach ($files as $file) {
+      (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
+    }
+    return rmdir($dir);
 }
 ?>

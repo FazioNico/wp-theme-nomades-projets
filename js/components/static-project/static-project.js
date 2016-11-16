@@ -31,7 +31,10 @@ export class StaticProject{
 
   loadEventUI(){
     if(document.getElementById('copyDistantFolder')){
-          document.getElementById('copyDistantFolder').addEventListener('click', this.copyDistantFolder.bind(this))
+      document.getElementById('copyDistantFolder').addEventListener('click', this.copyDistantFolder.bind(this))
+    }
+    if(document.getElementById('deleteLocalFolder')){
+      document.getElementById('deleteLocalFolder').addEventListener('click', this.deleteLocalFolder.bind(this))
     }
   }
 
@@ -68,6 +71,17 @@ export class StaticProject{
       console.warn("Les critères ne parsing de l'URL distante ne sont pas respectés (~ /)");
     }
 
+  }
+
+  deleteLocalFolder(event){
+    event.preventDefault();
+    // console.log(`event-> ${event}`)
+    // console.log(`folder-> ${this.localFolder}`)
+    let params = {'folder': this.localFolder };
+    this.wpAjax.ajaxCall({'action': 'delete_local_folder', 'params': params});
+    this.localFolder = 'projects-eleves';
+    this.$input.val(null);
+    this.loadUI();
   }
 
   /* Class View Methode */
