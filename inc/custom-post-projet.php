@@ -98,7 +98,7 @@ function field_project_render_image_attachment_box($post) {
 								//$existing_image_id = get_post_meta($post->ID,'_xxxx_attached_image', true);
 		            $arr_existing_image = wp_get_attachment_image_src($attachment->ID, 'large');
 		            $existing_image_url = $arr_existing_image[0];
-		            echo '<img data-id="'.$attachment->ID.'" style="width:100%;" src="' . $existing_image_url . '" />';
+		            echo '<img data-id="'.$attachment->ID.'" style="width:100%;max-width:200px;" src="' . $existing_image_url . '" />';
         }
 				echo '</div>';
     }
