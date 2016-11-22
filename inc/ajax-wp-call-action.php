@@ -5,9 +5,12 @@ add_action( 'wp_ajax_copy_distant_folder', 'copy_distant_folder' );
 add_action( 'wp_ajax_nopriv_delete_local_folder', 'delete_local_folder' );
 add_action( 'wp_ajax_delete_local_folder', 'delete_local_folder' );
 
+
+
 /* copy_distant_folder() Ajax Call function */
 function copy_distant_folder() {
   global $post;
+  global $connect_it;
   $result = 0;
   /* Création du répertoire Projet de l'elève */
   // 1. define root website
@@ -27,22 +30,18 @@ function copy_distant_folder() {
   }
   else {
     // connect by FTP
-    $ftpResult = ftpConnect();
-    if($ftpResult == true){
-      // 4 Create $path
-      // 5 copy distant files into the created $path
-      $copyResult = copyFolder($path,$projectFolder,$userName,$password);
-      // 6 returne the result
-      if($copyResult == true){
-        $resultTXT = 'Successfully copyed!';
-        $result = 1;
-      }
-      else{
-        $resultTXT = 'Copy error... there was a problem';
-      }
+
+    //print_r("test result-> $ftpResult");
+    // 4 Create $path
+    // 5 copy distant files into the created $path
+    $copyResult = copyFolder($path,$projectFolder,$userName,$password,$ftpResul);
+    // 6 returne the result
+    if($copyResult == true){
+      $resultTXT = 'Successfully copyed!';
+      $result = 1;
     }
     else{
-      $resultTXT = 'Impossible de se connecter au serveur!';
+      $resultTXT = 'Copy error... there was a problem';
     }
 
   }
@@ -55,29 +54,24 @@ function copy_distant_folder() {
 	die();
 }
 
-function ftpConnect(){
-  global $connect_it;
+function errorFTP(){
+  print_r('test handle error');
+  die();
+}
+function copyFolder($path,$remotePath,$userName,$password){
+  $result = false;
   /* FTP Account */
   $ftp_host = 'ateliers.nomades.ch'; /* host */
   $ftp_user_name = $userName; /* username */
   $ftp_user_pass = $password; /* password */
   /* Connect using basic FTP */
-  $connect_it = ftp_connect( $ftp_host );
-  if($connect_it){
-    return true;
-  }
-  else {
-    return false;
-  }
-}
+  $connect_it = ftp_connect( $ftp_host ) or errorFTP();
+   /* Login to FTP */
+  $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
 
-function copyFolder($path,$remotePath,$userName,$password){
-  $result = false;
+
   /* Source File Name and Path */
   $distantFolder = $remotePath;
-
-  /* Login to FTP */
-  $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
   // create profil path into server
   $localFolderReady = createLocalFolder($path);
   /* Loop in all directory */
@@ -98,8 +92,10 @@ function copyFolder($path,$remotePath,$userName,$password){
   return $result;
 }
 
-function localRecursiveCopy($distantFolder,$localPath,$connect_it){
+function localRecursiveCopy($distantFolder,$localPath, $connect_it){
   $contents = ftp_nlist($connect_it, $distantFolder);
+  // print_r('localRecursiveCopy result-> '.$contents);
+  // die();
   for($i=0; $i<count($contents); $i++) {
 		if (strstr($contents[$i], ".") !== FALSE) {
 			if (ftp_get($connect_it, $localPath.$contents[$i], "$distantFolder/$contents[$i]", FTP_ASCII)) {

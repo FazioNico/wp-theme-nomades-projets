@@ -86,22 +86,29 @@ export class StaticProject{
   displayAjaxResult(ajaxResult){
     //console.log(ajaxResult)
     let resultSelector = document.getElementById('loadingUI')
-    if(!resultSelector){
-      resultSelector.innerHTML = `
-        <p><b>${ajaxResult.extract}</b></p>
-        <hr/>
-        <p>Ne pas oublier d'enregister les modifications</p>
-        <input name="save" type="submit" class="button button-primary button-large" id="publish" value="Mettre à jour">
-      `;
+    if(resultSelector){
+      if(ajaxResult.state == 1){
+        resultSelector.innerHTML = `
+          <p><b>${ajaxResult.extract}</b></p>
+          <hr/>
+          <p>Ne pas oublier d'enregister les modifications</p>
+          <input name="save" type="submit" class="button button-primary button-large" id="publish" value="Mettre à jour">
+        `;
       }
       else {
+        this.$input.val('');
         resultSelector.innerHTML = `
           <p><b>${ajaxResult.extract}</b></p>
           <hr/>
           <span id="tryAgain" class="button button-primary button-large">Réessayer</div>
         `;
       }
-      this.loadEventUI()
+
+    }
+    else {
+
+    }
+    this.loadEventUI()
   }
 
   deleteLocalFolder(event){
