@@ -36,6 +36,13 @@ export class StaticProject{
     if(document.getElementById('deleteLocalFolder')){
       document.getElementById('deleteLocalFolder').addEventListener('click', this.deleteLocalFolder.bind(this))
     }
+    if(document.getElementById('tryAgain')){
+      document.getElementById('tryAgain').addEventListener('click', (event)=>{
+        event.preventDefault();
+        this.selector.innerHTML = this.defaultSeleletonUI();
+        this.loadEventUI()
+      })
+    }
   }
 
   /* Event Methode */
@@ -60,17 +67,41 @@ export class StaticProject{
       this.localFolder = this.localFolder + '/' + localFolder.join('/')+'/';
       // add folder value to input[name=url_projet]
       this.$input.val(this.localFolder)
-
+      this.selector.innerHTML = this.LoadingSeleletonUI();
       // Ajax call to WP Action API ->
       //console.info({'action-> ': action, 'params-> ': this.localFolder })
       //this.ajaxCall({'action': action, 'params': this.localFolder });
       let params = {'folder': this.localFolder, 'password': pwd };
-      this.wpAjax.ajaxCall({'action': action, 'params': params});
+      let ajaxResult = this.wpAjax.ajaxCall({'action': action, 'params': params});
+      ajaxResult.then((data)=>{
+        this.displayAjaxResult(JSON.parse(data));
+      })
     }
     else{
       console.warn("Les critères ne parsing de l'URL distante ne sont pas respectés (~ /)");
     }
 
+  }
+
+  displayAjaxResult(ajaxResult){
+    //console.log(ajaxResult)
+    let resultSelector = document.getElementById('loadingUI')
+    if(!resultSelector){
+      resultSelector.innerHTML = `
+        <p><b>${ajaxResult.extract}</b></p>
+        <hr/>
+        <p>Ne pas oublier d'enregister les modifications</p>
+        <input name="save" type="submit" class="button button-primary button-large" id="publish" value="Mettre à jour">
+      `;
+      }
+      else {
+        resultSelector.innerHTML = `
+          <p><b>${ajaxResult.extract}</b></p>
+          <hr/>
+          <span id="tryAgain" class="button button-primary button-large">Réessayer</div>
+        `;
+      }
+      this.loadEventUI()
   }
 
   deleteLocalFolder(event){
@@ -82,6 +113,10 @@ export class StaticProject{
     this.localFolder = 'projects-eleves';
     this.$input.val(null);
     this.loadUI();
+    document.getElementById('update').innerHTML = `
+      <p>Ne pas oublier d'enregister les modifications</p>
+      <input name="save" type="submit" class="button button-primary button-large" id="publish" value="Mettre à jour">
+    `;
   }
 
   /* Class View Methode */
@@ -94,6 +129,7 @@ export class StaticProject{
       <input style="width: 100%;" type="text" name="distantURL" id="distantURL" value="" placeholder="http://ateliers.nomades.ch/~eleve/dossier-de-projet/"><br/>
       <input style="width:60%;" type="text" name="serverPWD" id="serverPWD" value="nicfaz" placeholder="mot de pass du profil de l'élève"><br/>
       <button id="copyDistantFolder">Copier le projet de l'élève</button>
+      <div id="update"></div>
     `;
   }
 
@@ -103,6 +139,17 @@ export class StaticProject{
         Dossier du projet de l'élève: <a href="../../${this.localFolder}" target="_blank">Projet de l'élève</a> <br/>
       </p>
       <button id="deleteLocalFolder">supprimer le dossier de l'élève</button>
+    `;
+  }
+
+  LoadingSeleletonUI(){
+    return `
+      <div id="loadingUI">
+        <p>
+          loading...
+        </p>
+        <img src="images/spinner-2x.gif">
+      </div>
     `;
   }
 }

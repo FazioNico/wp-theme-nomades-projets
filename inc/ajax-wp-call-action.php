@@ -26,52 +26,76 @@ function copy_distant_folder() {
     die();
   }
   else {
-    // 4 Create $path
-    if (!mkdir($path, 0777, true)) {
-        print_r('Echec lors de la création des répertoires... ');
-        die();
+    // connect by FTP
+    $ftpResult = ftpConnect();
+    if($ftpResult == true){
+      // 4 Create $path
+      // 5 copy distant files into the created $path
+      $copyResult = copyFolder($path,$projectFolder,$userName,$password);
+      // 6 returne the result
+      if($copyResult == true){
+        $resultTXT = 'Successfully copyed!';
+        $result = 1;
+      }
+      else{
+        $resultTXT = 'Copy error... there was a problem';
+      }
     }
-    // 5 copy distant files into the created $path
-    $copyResult = copyFolder($path,$projectFolder,$userName,$password);
-    // 6 returne the result
-    $result = $copyResult;
+    else{
+      $resultTXT = 'Impossible de se connecter au serveur!';
+    }
+
   }
   //print_r($path);
   //print_r('path-> '.$path);
   //print_r('params-> '.$_POST['params']);
   //print_r('pwd-> '.$password."\n");
-  if($result == 1){
-    $resultTXT = 'Successfully copyed!';
-  }
-  else {
-    $resultTXT = 'Error... there was a problem';
-  }
-  print_r('Copy distant Folder result-> '.$resultTXT."\n");
+  //print_r("{'state': $result, 'extract': 'Copy distant Folder result-> $resultTXT\n'}");
+  print_r('{"state": '.$result.', "extract": "Copy distant Folder result-> '.$resultTXT.'"}');
 	die();
 }
 
-function copyFolder($path,$remotePath,$userName,$password){
-  /* Source File Name and Path */
-  $distantFolder = $remotePath;
+function ftpConnect(){
+  global $connect_it;
   /* FTP Account */
   $ftp_host = 'ateliers.nomades.ch'; /* host */
   $ftp_user_name = $userName; /* username */
   $ftp_user_pass = $password; /* password */
   /* Connect using basic FTP */
   $connect_it = ftp_connect( $ftp_host );
-  /* Login to FTP */
-  $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
-  /* Loop in all directory */
-  // TODO
-  if($_SERVER['SERVER_NAME'] == 'localhost'){
-    localRecursiveCopy($distantFolder, $path, $connect_it);
+  if($connect_it){
+    return true;
   }
   else {
-    prodRecursiveCopy($distantFolder, $path, $connect_it);
+    return false;
   }
+}
 
+function copyFolder($path,$remotePath,$userName,$password){
+  $result = false;
+  /* Source File Name and Path */
+  $distantFolder = $remotePath;
+
+  /* Login to FTP */
+  $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
+  // create profil path into server
+  $localFolderReady = createLocalFolder($path);
+  /* Loop in all directory */
+  if($localFolderReady == true){
+    if($_SERVER['SERVER_NAME'] == 'localhost'){
+      localRecursiveCopy($distantFolder, $path, $connect_it);
+    }
+    else {
+      prodRecursiveCopy($distantFolder, $path, $connect_it);
+    }
+    $result = true;
+  }
+  else {
+    $result =  false;
+  }
   /* Close ftp connect */
   ftp_close( $connect_it );
+  return $result;
 }
 
 function localRecursiveCopy($distantFolder,$localPath,$connect_it){
@@ -96,6 +120,16 @@ function prodRecursiveCopy($distantFolder, $path, $connect_it){
   print_r('TODO');
 }
 
+/* Create local folder*/
+function createLocalFolder($path){
+  if (!mkdir($path, 0777, true)) {
+    print_r('Echec lors de la création des répertoires... ');
+    return false;
+  }
+  else {
+    return true;
+  }
+}
 
 /* delete_local_folder() Ajax Call function */
 function delete_local_folder() {
