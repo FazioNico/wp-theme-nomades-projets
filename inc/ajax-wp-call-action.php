@@ -49,17 +49,17 @@ function copy_distant_folder() {
   //print_r('path-> '.$path);
   //print_r('params-> '.$_POST['params']);
   //print_r('pwd-> '.$password."\n");
-  //print_r("{'state': $result, 'extract': 'Copy distant Folder result-> $resultTXT\n'}");
-  print_r('{"state": '.$result.', "extract": "Copy distant Folder result-> '.$resultTXT.'"}');
+  //print_r('{"state": '.$result.', "extract": "Copy distant Folder result-> '.$resultTXT.'"}');
+  print_rJsonData($result,'Copy distant Folder result-> '.$resultTXT);
 	die();
 }
 
 function errorFTP(){
-  print_r('test handle error');
-  die();
+  print_rJsonData(0,'FTP connect result-> Imposible de se connecter sur le serveur FTP');
 }
 function copyFolder($path,$remotePath,$userName,$password){
   $result = false;
+  $copyResult = flase;
   /* FTP Account */
   $ftp_host = 'ateliers.nomades.ch'; /* host */
   $ftp_user_name = $userName; /* username */
@@ -68,7 +68,9 @@ function copyFolder($path,$remotePath,$userName,$password){
   $connect_it = ftp_connect( $ftp_host ) or errorFTP();
    /* Login to FTP */
   $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
-
+  if($login_result == false){
+    print_rJsonData(0,'Login FTP result-> Mot de passe ou login incorrect.');
+  }
 
   /* Source File Name and Path */
   $distantFolder = $remotePath;
@@ -77,12 +79,15 @@ function copyFolder($path,$remotePath,$userName,$password){
   /* Loop in all directory */
   if($localFolderReady == true){
     if($_SERVER['SERVER_NAME'] == 'localhost'){
-      localRecursiveCopy($distantFolder, $path, $connect_it);
+      $copyResult = localRecursiveCopy($distantFolder, $path, $connect_it);
     }
     else {
       prodRecursiveCopy($distantFolder, $path, $connect_it);
     }
     $result = true;
+    if($copyResult == false){
+      $result = false;
+    }
   }
   else {
     $result =  false;
@@ -93,23 +98,24 @@ function copyFolder($path,$remotePath,$userName,$password){
 }
 
 function localRecursiveCopy($distantFolder,$localPath, $connect_it){
+  $result = true;
   $contents = ftp_nlist($connect_it, $distantFolder);
-  // print_r('localRecursiveCopy result-> '.$contents);
-  // die();
   for($i=0; $i<count($contents); $i++) {
 		if (strstr($contents[$i], ".") !== FALSE) {
 			if (ftp_get($connect_it, $localPath.$contents[$i], "$distantFolder/$contents[$i]", FTP_ASCII)) {
-				echo "Successfully written-> $distantFolder/$contents[$i]\n";
+				//echo "Successfully written-> $distantFolder/$contents[$i]\n";
 			} else {
-				echo "There was a problem with-> $distantFolder/$contents[$i]\n";
+        $result = false;
+				//echo "There was a problem with-> $distantFolder/$contents[$i]\n";
 			}
 		}
 		else {
 			mkdir($localPath.$contents[$i],0777,true);
-      echo "Folder create-> ".$localPath.$contents[$i]."\n";
+      //echo "Folder create-> ".$localPath.$contents[$i]."\n";
 			$a = localRecursiveCopy("$distantFolder/$contents[$i]",$localPath.$contents[$i]."/",$connect_it);
 		}
 	}
+  return $result;
 }
 
 function prodRecursiveCopy($distantFolder, $path, $connect_it){
@@ -143,7 +149,7 @@ function delete_local_folder() {
   if (is_dir($path)) {
       print_r(delTree($path));
   }
-  print_r('path ? ->'.is_dir($path));
+  //print_r('path ? ->'.is_dir($path));
   //print_r("Folder to delete-> $path");
   die();
 }
@@ -154,5 +160,10 @@ function delTree($dir) {
       (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
     }
     return rmdir($dir);
+}
+
+function print_rJsonData($state,$extract){
+  print_r('{"state": '.$state.', "extract": "'.$extract.'"}');
+  die();
 }
 ?>
