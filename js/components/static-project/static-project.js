@@ -31,10 +31,10 @@ export class StaticProject{
 
   loadEventUI(){
     if(document.getElementById('copyDistantFolder')){
-      document.getElementById('copyDistantFolder').addEventListener('click', this.copyDistantFolder.bind(this))
+      document.getElementById('copyDistantFolder').addEventListener('click', ()=>this.copyDistantFolder(event))
     }
     if(document.getElementById('deleteLocalFolder')){
-      document.getElementById('deleteLocalFolder').addEventListener('click', this.deleteLocalFolder.bind(this))
+      document.getElementById('deleteLocalFolder').addEventListener('click', ()=>this.deleteLocalFolder(event))
     }
     if(document.getElementById('tryAgain')){
       document.getElementById('tryAgain').addEventListener('click', (event)=>{

@@ -14,12 +14,12 @@ export class ProjectPostType {
   loadEventUI(){
     // JS for delete Img attachement of Projects
     if(document.getElementById('attachementImg')){
-      document.getElementById('attachementImg').addEventListener('click', this.deleteAttachmentImg)
+      document.getElementById('attachementImg').addEventListener('click', ()=>this.deleteAttachmentImg(event))
     }
     // JS for Upload Eleves Project in new folder
     if(document.getElementById('controle-project_type')){
       this.checkProjectType()
-      jQuery('input[name=project_type]').on('change', this.checkProjectType)
+      jQuery('input[name=project_type]').on('change', ()=>this.checkProjectType())
     }
   }
 
