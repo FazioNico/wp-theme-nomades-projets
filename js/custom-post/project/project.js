@@ -1,6 +1,6 @@
 
 import  { StaticProject } from '../../components/static-project/static-project';
-//import  { WpProject } from '../../components/wp-project/wp-project';
+import  { StaticSQLProject } from '../../components/static-sql-project/static-sql-project';
 //import  { AtypikProject } from '../../components/atypik-project/atypik-project';
 
 export class ProjectPostType {
@@ -34,8 +34,8 @@ export class ProjectPostType {
         new StaticProject();
         break;
       case 'wp':
-        //new WpProject();
-        document.getElementById('controle-project_type').innerHTML = project_type;
+        new StaticSQLProject();
+        //document.getElementById('controle-project_type').innerHTML = project_type;
         break;
       case 'atypique':
         //new AtypikProject();

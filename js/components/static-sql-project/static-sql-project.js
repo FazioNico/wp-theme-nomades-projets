@@ -1,9 +1,9 @@
 import  { WpAjaxCallService } from '../../providers/wp-ajax/wp-ajax'
 
-export class StaticProject{
+export class StaticSQLProject{
 
   constructor(wpAjax = WpAjaxCallService){
-    console.log('Hello static project!')
+    console.log('Hello static SQL project!')
     this.wpAjax = new WpAjaxCallService();
     this.selector = document.getElementById('controle-project_type');
     this.$input = jQuery('input[name=url_projet]')
@@ -137,6 +137,13 @@ export class StaticProject{
       </p>
       <input style="width: 100%;" type="text" name="distantURL" id="distantURL" value="" placeholder="http://ateliers.nomades.ch/~eleve/dossier-de-projet/"><br/>
       <input style="width:60%;" type="text" name="serverPWD" id="serverPWD" value="nicfaz" placeholder="mot de pass du profil de l'élève"><br/>
+      <br/>
+      <p>
+        <b>Base de donnée</b>
+      </p>
+      <input style="width: 45%;" type="text" name="bddName" id="bddName" value="" placeholder="nom de la base de donnée">
+      <input style="width: 45%;" type="text" name="bddUser" id="bddUser" value="" placeholder="user de la base de donnée"><br/>
+      <input style="width: 45%;" type="text" name="bddPw" id="bddPw" value="" placeholder="password de la base de donnée"><br/>
       <br/>
       <p>
         <b>Sauvegarder</b>
