@@ -3,7 +3,6 @@ import  { WpAjaxCallService } from '../../providers/wp-ajax/wp-ajax'
 export class StaticProject{
 
   constructor(wpAjax = WpAjaxCallService){
-
     console.log('Hello static project!')
     this.wpAjax = new WpAjaxCallService();
     this.selector = document.getElementById('controle-project_type');
