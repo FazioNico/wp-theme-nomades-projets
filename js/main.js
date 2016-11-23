@@ -4,10 +4,10 @@ import  { ProjectPostType } from './custom-post/project/project';
 class App{
 
   constructor(){
-    document.addEventListener("DOMContentLoaded", this.start)
+    document.addEventListener("DOMContentLoaded", ()=> this.start())
   }
 
-  start(event){
+  start(){
     if(document.getElementsByClassName('wp-admin').length>0){
       console.log('-> back')
       ///JS for Custom Post type: Projects
