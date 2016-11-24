@@ -141,14 +141,15 @@ export class StaticSQLProject{
       <p>
         <b>Base de donnée</b>
       </p>
-      <input style="width: 45%;" type="text" name="bddName" id="bddName" value="" placeholder="nom de la base de donnée">
-      <input style="width: 45%;" type="text" name="bddUser" id="bddUser" value="" placeholder="user de la base de donnée"><br/>
+      <input style="width: 45%;" type="text" name="bddHost" id="bddHost" value="" placeholder="Serveur host">
+      <input style="width: 45%;" type="text" name="bddName" id="bddName" value="" placeholder="nom de la base de donnée"><br/>
+      <input style="width: 45%;" type="text" name="bddUser" id="bddUser" value="" placeholder="user de la base de donnée">
       <input style="width: 45%;" type="text" name="bddPw" id="bddPw" value="" placeholder="password de la base de donnée"><br/>
       <br/>
       <p>
         <b>Sauvegarder</b>
       </p>
-      <button id="copyDistantFolder">Copier le projet de l'élève</button>
+      <button id="copyDistantFolder" class="button button-primary button-large" >Copier le projet de l'élève</button>
       <div id="update"></div>
     `;
   }
@@ -158,7 +159,7 @@ export class StaticSQLProject{
       <p>
         Dossier du projet de l'élève: <a href="../../${this.localFolder}" target="_blank">Projet de l'élève</a> <br/>
       </p>
-      <button id="deleteLocalFolder">supprimer le dossier de l'élève</button>
+      <button id="deleteLocalFolder" class="button button-primary button-large" >supprimer le dossier de l'élève</button>
     `;
   }
 

@@ -141,7 +141,7 @@ export class StaticProject{
       <p>
         <b>Sauvegarder</b>
       </p>
-      <button id="copyDistantFolder">Copier le projet de l'élève</button>
+      <button id="copyDistantFolder" class="button button-primary button-large" >Copier le projet de l'élève</button>
       <div id="update"></div>
     `;
   }
@@ -151,7 +151,7 @@ export class StaticProject{
       <p>
         Dossier du projet de l'élève: <a href="../../${this.localFolder}" target="_blank">Projet de l'élève</a> <br/>
       </p>
-      <button id="deleteLocalFolder">supprimer le dossier de l'élève</button>
+      <button id="deleteLocalFolder" class="button button-primary button-large" >supprimer le dossier de l'élève</button>
     `;
   }
 
