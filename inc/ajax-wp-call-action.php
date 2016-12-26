@@ -5,6 +5,8 @@ add_action( 'wp_ajax_copy_distant_folder', 'copy_distant_folder' );
 add_action( 'wp_ajax_nopriv_delete_local_folder', 'delete_local_folder' );
 add_action( 'wp_ajax_delete_local_folder', 'delete_local_folder' );
 
+// Load update_wp_config class & function
+require_once('update_wp_config.php');
 
 
 /* copy_distant_folder() Ajax Call function */
@@ -45,6 +47,12 @@ function copy_distant_folder() {
     }
 
   }
+  if($result == 1){
+    // 7 createSqlBdd & update wp_config.php
+    //$resultUpdateProject = updateProjectConfig()
+  }
+
+
   //print_r($path);
   //print_r('path-> '.$path);
   //print_r('params-> '.$_POST['params']);
@@ -119,6 +127,7 @@ function localRecursiveCopy($distantFolder,$localPath, $connect_it){
 }
 
 function prodRecursiveCopy($distantFolder, $path, $connect_it){
+  // TODO: create server function...
   print_r('TODO');
 }
 
@@ -165,5 +174,34 @@ function delTree($dir) {
 function print_rJsonData($state,$extract){
   print_r('{"state": '.$state.', "extract": "'.$extract.'"}');
   die();
+}
+
+/* Change db name in wp_config.php */
+function updateProjectConfig(){
+
+  // 1: First createSqlBdd of user project
+  $file = 'student_42.sql';
+  $dbConf = array(
+   'host' => 'localhost',
+   'username' => 'fazio',
+   'passwd' => '',
+   'dbname' => 'import_test',
+   'port' => '3306' // 3306
+  );
+  $resultCreatSQL = (createSqlBdd($file,$dbConf));
+
+  // 2: then update wp_config.php with the right db config name and prefix
+  $filePath = "test.php";
+  $lookfor = 'old_db_name';
+  $newtext = 'new_db_name';
+  $update_wp_config = new Update_WP_Config($filePath,$lookfor,$newtext);
+  $resultUpdateConfigFile = $update_wp_config->result;
+  //print_r($update_wp_config->result);
+  if($resultCreatSQL == true && $resultCreatSQL == true){
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 ?>
