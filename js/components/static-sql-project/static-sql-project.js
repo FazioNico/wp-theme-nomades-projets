@@ -51,11 +51,13 @@ export class StaticSQLProject{
     // URL for testing: http://ateliers.nomades.ch/~fazio/exercice05ajax/
     let distantFolderInput = document.getElementById('distantURL').value;
     let pwd = document.getElementById('serverPWD').value;
+    let sqlFile = document.getElementById('sqlFile')
     if(
       distantFolderInput.length > 1
       && distantFolderInput.indexOf("~")>0
       && distantFolderInput.indexOf("/")>0
       && pwd.length >=3
+      && sqlFile.files[0]
     ){
       let pathName = {
         'userPath': distantFolderInput.split('~')[1].split('/')[0],
@@ -70,11 +72,12 @@ export class StaticSQLProject{
       // Ajax call to WP Action API ->
       //console.info({'action-> ': action, 'params-> ': this.localFolder })
       //this.ajaxCall({'action': action, 'params': this.localFolder });
-      let params = {'folder': this.localFolder, 'password': pwd };
+      let params = {'folder': this.localFolder, 'password': pwd, 'sqlFile': sqlFile.files[0].name };
       let ajaxResult = this.wpAjax.ajaxCall({'action': action, 'params': params});
       ajaxResult.then((data)=>{
         this.displayAjaxResult(JSON.parse(data));
       })
+      console.log('ajaxCall params -> ', params)
     }
     else{
       console.warn("Les critères ne parsing de l'URL distante ne sont pas respectés (~ /)");
@@ -141,11 +144,8 @@ export class StaticSQLProject{
       <p>
         <b>Base de donnée</b>
       </p>
-      <input style="width: 45%;" type="text" name="bddHost" id="bddHost" value="" placeholder="Serveur host">
-      <input style="width: 45%;" type="text" name="bddName" id="bddName" value="" placeholder="nom de la base de donnée"><br/>
-      <input style="width: 45%;" type="text" name="bddUser" id="bddUser" value="" placeholder="user de la base de donnée">
-      <input style="width: 45%;" type="text" name="bddPw" id="bddPw" value="" placeholder="password de la base de donnée"><br/>
-      <br/>
+      <input type="file" name="sqlFile" id="sqlFile"/>
+
       <p>
         <b>Sauvegarder</b>
       </p>

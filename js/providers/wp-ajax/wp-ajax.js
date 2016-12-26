@@ -25,7 +25,7 @@ export class WpAjaxCallService{
   }
 
   ajaxResponse(response){
-    // console.log(response);
+    console.log('Ajax Response debug-> '.response);
     let ajaxResult = JSON.parse(response)
     console.log(ajaxResult);
     return ajaxResult;

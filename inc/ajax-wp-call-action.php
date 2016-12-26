@@ -6,7 +6,8 @@ add_action( 'wp_ajax_nopriv_delete_local_folder', 'delete_local_folder' );
 add_action( 'wp_ajax_delete_local_folder', 'delete_local_folder' );
 
 // Load update_wp_config class & function
-require_once('update_wp_config.php');
+//require_once('update_wp_config.php');
+require get_template_directory() . '/inc/update_wp_config.php';
 
 
 /* copy_distant_folder() Ajax Call function */
@@ -23,6 +24,9 @@ function copy_distant_folder() {
   $password = $_POST['params']['password'];
   $userName = explode('/', $_POST['params']['folder'])[1];
   $projectFolder = 'public_html/'.explode('/', $_POST['params']['folder'])[2];
+  if(isset($_POST['params']['sqlFile'])){
+    $sqlFile = $_POST['params']['sqlFile'];
+  }
   //print_r($projectFolder);
   //die();
   // 3 Check if $path existe
@@ -36,7 +40,7 @@ function copy_distant_folder() {
     //print_r("test result-> $ftpResult");
     // 4 Create $path
     // 5 copy distant files into the created $path
-    $copyResult = copyFolder($path,$projectFolder,$userName,$password,$ftpResul);
+    $copyResult = copyFolder($path,$projectFolder,$userName,$password);
     // 6 returne the result
     if($copyResult == true){
       $resultTXT = 'Successfully copyed!';
@@ -48,8 +52,14 @@ function copy_distant_folder() {
 
   }
   if($result == 1){
-    // 7 createSqlBdd & update wp_config.php
-    //$resultUpdateProject = updateProjectConfig()
+    if(isset($sqlFile)){
+      // 7 createSqlBdd & update wp_config.php
+      $resultUpdateProject = updateProjectConfig($path,$sqlFile);
+      if($resultUpdateProject == true){
+        $resultTXT = 'All run task finish with success!!';
+      }
+    }
+
   }
 
 
@@ -177,10 +187,10 @@ function print_rJsonData($state,$extract){
 }
 
 /* Change db name in wp_config.php */
-function updateProjectConfig(){
+function updateProjectConfig($path,$sqlFile){
 
   // 1: First createSqlBdd of user project
-  $file = 'student_42.sql';
+  $file = $sqlFile;
   $dbConf = array(
    'host' => 'localhost',
    'username' => 'fazio',
@@ -188,20 +198,22 @@ function updateProjectConfig(){
    'dbname' => 'import_test',
    'port' => '3306' // 3306
   );
-  $resultCreatSQL = (createSqlBdd($file,$dbConf));
+  //$resultCreatSQL = (createSqlBdd($file,$dbConf));
 
   // 2: then update wp_config.php with the right db config name and prefix
-  $filePath = "test.php";
-  $lookfor = 'old_db_name';
-  $newtext = 'new_db_name';
+  $filePath = $path."wp_config.php";
+  $lookfor = 'student_42';
+  $newtext = 'import_test';
   $update_wp_config = new Update_WP_Config($filePath,$lookfor,$newtext);
   $resultUpdateConfigFile = $update_wp_config->result;
   //print_r($update_wp_config->result);
-  if($resultCreatSQL == true && $resultCreatSQL == true){
+  //if($resultCreatSQL && $resultUpdateConfigFile == true){
+  if($resultUpdateConfigFile == true){
     return true;
   }
   else {
     return false;
   }
+  //return true;
 }
 ?>

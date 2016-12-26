@@ -26,16 +26,17 @@
     private $lookFor;
     private $newtext;
 
-    function __construct($filePath,$lookfor,$newtext) {
+    function __construct($file,$lookfor,$newtext) {
 
         $this->newData = array();
-        $this->filename = $filePath;
-        $this->fileData = file($this->filename);
+        $this->filePath = $file;
+        $this->fileData = file($this->filePath);
         $this->lookFor = $lookfor;
         $this->newText = $newtext;
 
-        $result_file_data = $this->formate_wp_db_name($newtext);
-        if(file_put_contents("test.php",$result_file_data) === false){
+        $result_file_data = $this->formate_wp_db_name();
+        //print_r($result_file_data);
+        if(file_put_contents($this->filePath, $result_file_data) === false){
           $result = false;
         }
         else {
@@ -44,7 +45,7 @@
         $this->result = $result;
     }
 
-    function formate_wp_db_name($newtext){
+    function formate_wp_db_name(){
 
       foreach ($this->fileData as $filerow) {
         $this->newData[] = $this->replace_between($filerow, $this->lookFor, $this->newText);
