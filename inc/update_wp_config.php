@@ -4,7 +4,7 @@
 @Date:   26-12-2016
 @Email:  contact@nicolasfazio.ch
 @Last modified by:   webmaster-fazio
-@Last modified time: 26-12-2016
+@Last modified time: 28-12-2016
 */
 
 /*
@@ -30,7 +30,7 @@
 
         $this->newData = array();
         $this->filePath = $file;
-        $this->fileData = file($this->filePath);
+        //$this->fileData = file($this->filePath);
         $this->lookFor = $lookfor;
         $this->newText = $newtext;
 
@@ -43,19 +43,26 @@
           $result = true;
         };
         $this->result = $result;
+
+        //$resp = file_put_contents($this->filePath, 'ppp');
+        //$this->result = true;
+        //die($resp);
     }
 
     function formate_wp_db_name(){
 
-      foreach ($this->fileData as $filerow) {
+      foreach (file($this->filePath) as $filerow) {
         $this->newData[] = $this->replace_between($filerow, $this->lookFor, $this->newText);
       }
       if(!$this->newData[0]){
-        $result = $filerow;
+        // TODO: test if is ok
+        $result = $this->filePath;
+
       }
       else {
         $result = implode('',$this->newData);
       }
+      //$result = 'pp';
       return $result;
     }
 
