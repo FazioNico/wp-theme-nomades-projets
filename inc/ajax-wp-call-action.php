@@ -196,8 +196,8 @@ function print_rJsonData($state,$extract){
 /* Change db name in wp_config.php */
 function updateProjectConfig($path,$sqlFile){
 
-  // 1: First createSqlBdd of user project
-  $file = $sqlFile;
+  //$file = $sqlFile;
+  $file = '../'.$sqlFile;
   $dbConf = array(
    'host' => 'localhost',
    'username' => 'fazio',
@@ -205,12 +205,11 @@ function updateProjectConfig($path,$sqlFile){
    'dbname' => 'import_test',
    'port' => '3306' // 3306
   );
-  //$resultCreatSQL = (createSqlBdd($file,$dbConf));
-
-  // 2: then update wp_config.php with the right db config name and prefix
+  // 1: First update wp_config.php with the right db config name and prefix
   //$filePath = "../../projects-eleves/fazio/wordpress/wp-config.php";
-  $filePath = "../../projects-eleves/fazio/wordpress/wp-config.php";
-  //$filePath = "../../".$path."wp-config.php";
+  $filePath = "../../".$path."wp-config.php";
+  // projects-eleves/fazio/wordpress/
+  // projects-eleves/fazio/wordpress/
   $lookfor = '';
   $newtext = '';
   //$update_wp_config_DB_USER = new Update_WP_Config($filePath,$lookfor,$newtext);
@@ -228,7 +227,16 @@ function updateProjectConfig($path,$sqlFile){
     $update_wp_config_DB_USER->result === true &&
     $update_wp_config_DB_PASSWORD->result === true
   ){
-    return true;
+
+    // 2: then createSqlBdd of user project
+    $resultCreatSQL = createSqlBdd($file,$dbConf);
+    if($resultCreatSQL=== true){
+      return true;
+    }
+    else {
+      return false;
+    }
+
   }
   else {
     return false;
