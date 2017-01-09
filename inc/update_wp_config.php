@@ -4,7 +4,7 @@
 @Date:   26-12-2016
 @Email:  contact@nicolasfazio.ch
 @Last modified by:   webmaster-fazio
-@Last modified time: 28-12-2016
+@Last modified time: 09-01-2017
 */
 
 /*
@@ -92,11 +92,12 @@ function createSqlBdd($file,$dbConf){
       $db = new PDO('mysql: host='.$dbConf['host'].';dbname='.$dbConf['dbname'], $dbConf['username'], $dbConf['passwd']);
       //$db = new PDO($dsn, $user, $password);
       $sql = file_get_contents($file);
-      $qr = $db->exec($sql) or die(print_r($db->errorInfo(), true));
-      return 'RESULT-> '.$qr;
+      $qr = $db->exec($sql) ;//or die(print_r($db->errorInfo(), true));
+      return true;
   } catch (PDOException $e) {
-      print_r( "Error: " . $e->getMessage());
-      die();
+      //print_r( "Error: " . $e->getMessage());
+      //die();
+      return false;
   }
 }
 

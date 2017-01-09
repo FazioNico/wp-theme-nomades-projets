@@ -42,7 +42,7 @@ function copy_distant_folder() {
     // 5 copy distant files into the created $path
     $copyResult = copyFolder($path,$projectFolder,$userName,$password);
     // 6 returne the result
-    if($copyResult == true){
+    if($copyResult === true){
       $resultTXT = 'Successfully copyed!';
       $result = 1;
       if(isset($sqlFile)){
@@ -69,12 +69,13 @@ function copy_distant_folder() {
   //
   // }
 
-
+  //print_r($resultTXT);
   //print_r($path);
   //print_r('path-> '.$path);
   //print_r('params-> '.$_POST['params']);
   //print_r('pwd-> '.$password."\n");
   //print_r('{"state": '.$result.', "extract": "Copy distant Folder result-> '.$resultTXT.'"}');
+
   print_rJsonData($result,'Copy distant Folder result-> '.$resultTXT);
 	die();
 }
@@ -213,7 +214,7 @@ function updateProjectConfig($path,$sqlFile,$projectFolder){
   $lookfor = '';
   $newtext = '';
   //$update_wp_config_DB_USER = new Update_WP_Config($filePath,$lookfor,$newtext);
-  $update_wp_config_DB_NAME = new Update_WP_Config($filePath, 'student_42', 'import_test');
+  $update_wp_config_DB_NAME = new Update_WP_Config($filePath, 'student_42', $dbConf['dbname']);
   $update_wp_config_DB_USER = new Update_WP_Config($filePath,'teacher',$dbConf['username']);
   $update_wp_config_DB_PASSWORD = new Update_WP_Config($filePath,'superprof',$dbConf['passwd']);
   $update_wp_config_DB_HOST = new Update_WP_Config($filePath,'localhost',$dbConf->host);
@@ -222,31 +223,34 @@ function updateProjectConfig($path,$sqlFile,$projectFolder){
   //$resultUpdateConfigFile = $update_wp_config_DB_PASSWORD->result;
   //print_r($update_wp_config->result);
   // TODO: Test return data
-  if($update_wp_config_DB_NAME === true){
-     return true;
-  }
-  else {
-    return false;
-  }
-  // if(
-  //   $update_wp_config_DB_NAME->result === true &&
-  //   $update_wp_config_DB_USER->result === true &&
-  //   $update_wp_config_DB_PASSWORD->result === true
-  // ){
-  //
-  //   // 2: then createSqlBdd of user project
-  //   $resultCreatSQL = createSqlBdd($file,$dbConf);
-  //   if($resultCreatSQL=== true){
-  //     return true;
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  //
+  // if($update_wp_config_DB_NAME === true){
+  //    return true;
   // }
   // else {
   //   return false;
   // }
+
+  if(
+    $update_wp_config_DB_NAME->result === true &&
+    $update_wp_config_DB_USER->result === true &&
+    $update_wp_config_DB_PASSWORD->result === true
+  ){
+
+    // 2: then createSqlBdd of user project
+    $resultCreatSQL = createSqlBdd($file,$dbConf);
+    //return $resultCreatSQL;
+    // if($resultCreatSQL=== true){
+    //   return true;
+    // }
+    // else {
+    //   return false;
+    // }
+    return $resultCreatSQL;
+
+  }
+  else {
+    return false;
+  }
   //return true;
 }
 ?>
