@@ -25,6 +25,12 @@
   - `$ gulp`
   - Let's work!
 
+## Get Started
+  - run webserver like MAMP from the root wp folder `./public_html/Wordpress_Default`
+  - open this project in IDE from `./wp-content/themes/dev/nomades-projets`
+  - run `$ nvm use 6` and `$ npm install` to download and install all node nodules.
+  - then you're ready to work by runing `$ gulp` to build dist theme folder in the right place `./wp-content/themes/nomades-projets`
+
   *NB: first time use `$ gulp bower` to install all bower dependencies*
 
 ## About author

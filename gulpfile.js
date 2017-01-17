@@ -28,7 +28,7 @@ var path = {
    sassPath:     './sass',
    bowerDir:     './bower_components' ,
   tmpDir:       './tmp',
-  desDir:       '../'
+  desDir:       '../../nomades-projets/'
 }
 var bowerDependencies = [
   path.bowerDir + '/jquery/dist/jquery.min.js'
@@ -65,7 +65,7 @@ gulp.task('css', function () {
   return gulp.src([path.tmpDir+'/*.css', path.dev+'/style.css'])
     .pipe(useref())
     .pipe(concatCss("style.css"))
-    .pipe(cssmin({keepSpecialComments : 0}))
+    .pipe(cssmin({keepSpecialComments : 1}))
     .pipe(gulp.dest(path.desDir))
     .pipe(reload({stream:true}));
 });
@@ -96,7 +96,7 @@ gulp.task("ES6-js", function(){
 });
 // Task to copy *.php files in desDir
 gulp.task('php', function () {
-  return gulp.src(['./**/*.php', './template-parts/*.php'])
+  return gulp.src(['./*.php', './**/*.php', './template-parts/*.php'])
     .pipe(gulp.dest(path.desDir))
     .pipe(reload({stream:true}));
 });
@@ -107,6 +107,14 @@ gulp.task('img', function () {
     .pipe(gulp.dest(path.desDir+'src/img/'))
     .pipe(reload({stream:true}));
 });
+
+// Task to copy reste of WP files in desDir
+gulp.task('wpfile', function () {
+  return gulp.src(['./**/*.pot', './screenshot.png'])
+    .pipe(gulp.dest(path.desDir))
+    .pipe(reload({stream:true}));
+});
+
 // browser-sync task for starting the server.
 gulp.task('browser-sync', function() {
     //watch files
@@ -127,6 +135,7 @@ gulp.task('browser-sync', function() {
 // Task watch
 // Rerun the task when a file changes
  gulp.task('watch', function() {
+  gulp.watch('./*.php', ['php']);
   gulp.watch('./**/*.php', ['php']);
   gulp.watch('./template-parts/*.php', ['php']);
   //gulp.watch('./js/*.js', ['js']);
@@ -137,4 +146,4 @@ gulp.task('browser-sync', function() {
 });
 
 // Task to watch change and reload
-gulp.task('default', ['bowerDependencies', 'sass','browser-sync', 'ES6-js', 'css', 'php', 'img', 'watch']);
+gulp.task('default', ['bowerDependencies', 'sass','browser-sync', 'ES6-js', 'css', 'php', 'img', 'wpfile', 'watch']);
