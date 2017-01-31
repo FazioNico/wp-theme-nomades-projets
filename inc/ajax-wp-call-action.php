@@ -154,9 +154,9 @@ function localRecursiveCopy($distantFolder,$localPath, $connect_it){
 function prodRecursiveCopy($distantFolder,$localPath){
   // TODO: create server function...
   /* FTP Account for local copy folders */
-  $ftp_host = 'localhost'; /* host */
-  $ftp_user_name = 'vial-projets'; /* username */
-  $ftp_user_pass = '3KfA8FZm'; /* password */
+  $ftp_host = ''; /* host */
+  $ftp_user_name = ''; /* username */
+  $ftp_user_pass = ''; /* password */
   /* Connect using basic FTP */
   $connect_it = ftp_connect( $ftp_host ) or errorFTP();
    /* Login to FTP */
@@ -187,9 +187,9 @@ function prodRecursiveCopy($distantFolder,$localPath){
 /* Create local folder*/
 function createLocalFolder($path){
   /* FTP Account for local copy folders */
-  // $ftp_host = 'localhost'; /* host */
-  // $ftp_user_name = 'vial-projets'; /* username */
-  // $ftp_user_pass = '3KfA8FZm'; /* password */
+  // $ftp_host = ''; /* host */
+  // $ftp_user_name = ''; /* username */
+  // $ftp_user_pass = ''; /* password */
   // /* Connect using basic FTP */
   // $connect_it = ftp_connect( $ftp_host ) or errorFTP();
   //  /* Login to FTP */
