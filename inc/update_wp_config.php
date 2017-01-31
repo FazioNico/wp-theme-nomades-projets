@@ -3,8 +3,8 @@
 @Author: Nicolas Fazio <webmaster-fazio>
 @Date:   26-12-2016
 @Email:  contact@nicolasfazio.ch
-@Last modified by:   webmaster-fazio
-@Last modified time: 09-01-2017
+# @Last modified by:   webmaster-fazio
+# @Last modified time: 31-01-2017
 */
 
 /*
@@ -34,7 +34,7 @@
         $this->lookFor = $lookfor;
         $this->newText = $newtext;
 
-        $result_file_data = $this->formate_wp_db_name();
+        $result_file_data = $this->search_and_replace();
         //print_r($result_file_data);
         if(file_put_contents($this->filePath, $result_file_data) === false){
           $result = false;
@@ -49,7 +49,7 @@
         //die($resp);
     }
 
-    function formate_wp_db_name(){
+    function search_and_replace(){
 
       foreach (file($this->filePath) as $filerow) {
         $this->newData[] = $this->replace_between($filerow, $this->lookFor, $this->newText);

@@ -1,3 +1,11 @@
+/**
+* @Author: Nicolas Fazio <webmaster-fazio>
+* @Date:   23-11-2016
+* @Email:  contact@nicolasfazio.ch
+* @Last modified by:   webmaster-fazio
+* @Last modified time: 31-01-2017
+*/
+
 import  { WpAjaxCallService } from '../../providers/wp-ajax/wp-ajax'
 
 export class StaticSQLProject{
@@ -75,6 +83,7 @@ export class StaticSQLProject{
       let params = {'folder': this.localFolder, 'password': pwd, 'sqlFile': sqlFile.files[0].name };
       let ajaxResult = this.wpAjax.ajaxCall({'action': action, 'params': params});
       ajaxResult.then((data)=>{
+        console.log('AjaxResult -> ', JSON.parse(data))
         this.displayAjaxResult(JSON.parse(data));
       })
       console.log('ajaxCall params -> ', params)

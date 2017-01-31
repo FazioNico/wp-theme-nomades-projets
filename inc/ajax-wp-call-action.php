@@ -1,4 +1,10 @@
 <?php
+# @Author: Nicolas Fazio <webmaster-fazio>
+# @Date:   03-11-2016
+# @Email:  contact@nicolasfazio.ch
+# @Last modified by:   webmaster-fazio
+# @Last modified time: 31-01-2017
+
 add_action( 'wp_ajax_nopriv_copy_distant_folder', 'copy_distant_folder' );
 add_action( 'wp_ajax_copy_distant_folder', 'copy_distant_folder' );
 
@@ -13,14 +19,14 @@ require get_template_directory() . '/inc/update_wp_config.php';
 /* copy_distant_folder() Ajax Call function */
 function copy_distant_folder() {
   global $post;
-  global $connect_it;
+  //global $connect_it;
   $result = 0;
   /* Création du répertoire Projet de l'elève */
   // 1. define root website
   //$rootPath = explode("/wp", get_site_url()); // for PROD (http server)
   $rootPath = $_SERVER['DOCUMENT_ROOT']."/"; // for DEV (localhost)
   // 2 Create de $path we need
-  $path = $rootPath.$_POST['params']['folder'];
+  $path = $rootPath.$_POST['params']['folder']; //projects-eleves/fazio/exercice05ajax/
   $password = $_POST['params']['password'];
   $userName = explode('/', $_POST['params']['folder'])[1];
   $projectFolder = 'public_html/'.explode('/', $_POST['params']['folder'])[2];
@@ -47,7 +53,7 @@ function copy_distant_folder() {
       $result = 1;
       if(isset($sqlFile)){
         // 7 createSqlBdd & update wp_config.php
-        $resultUpdateProject = updateProjectConfig($path,$sqlFile,$projectFolder);
+        $resultUpdateProject = updateProjectConfig($path,$sqlFile,$projectFolder, $userName);
         if($resultUpdateProject === true){
           $resultTXT = 'All run task finish with success!!';
         }
@@ -87,7 +93,7 @@ function copyFolder($path,$remotePath,$userName,$password){
   $result = false;
   $copyResult = flase;
   /* FTP Account */
-  $ftp_host = 'ateliers.nomades.ch'; /* host */
+  $ftp_host = 'filesrv.ateliers.nomades.ch'; /* host */
   $ftp_user_name = $userName; /* username */
   $ftp_user_pass = $password; /* password */
   /* Connect using basic FTP */
@@ -95,7 +101,7 @@ function copyFolder($path,$remotePath,$userName,$password){
    /* Login to FTP */
   $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
   if($login_result == false){
-    print_rJsonData(0,'Login FTP result-> Mot de passe ou login incorrect.');
+    print_rJsonData(0,"Login FTP result-> Mot de passe ($ftp_user_pass) ou login ($ftp_user_name) incorrect.");
   }
 
   /* Source File Name and Path */
@@ -108,7 +114,8 @@ function copyFolder($path,$remotePath,$userName,$password){
       $copyResult = localRecursiveCopy($distantFolder, $path, $connect_it);
     }
     else {
-      prodRecursiveCopy($distantFolder, $path, $connect_it);
+      $copyResult = localRecursiveCopy($distantFolder, $path, $connect_it);
+      //prodRecursiveCopy($distantFolder, $path, $connect_it);
     }
     $result = true;
     if($copyResult == false){
@@ -144,13 +151,69 @@ function localRecursiveCopy($distantFolder,$localPath, $connect_it){
   return $result;
 }
 
-function prodRecursiveCopy($distantFolder, $path, $connect_it){
+function prodRecursiveCopy($distantFolder,$localPath){
   // TODO: create server function...
-  print_r('TODO');
+  /* FTP Account for local copy folders */
+  $ftp_host = 'localhost'; /* host */
+  $ftp_user_name = 'vial-projets'; /* username */
+  $ftp_user_pass = '3KfA8FZm'; /* password */
+  /* Connect using basic FTP */
+  $connect_it = ftp_connect( $ftp_host ) or errorFTP();
+   /* Login to FTP */
+  $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
+  if($login_result == false){
+    print_rJsonData(0,"Login FTP on 'nomades-projets.ch' result-> Mot de passe ou login incorrect.");
+  }
+  $result = true;
+  $contents = ftp_nlist($connect_it, $distantFolder);
+  for($i=0; $i<count($contents); $i++) {
+		if (strstr($contents[$i], ".") !== FALSE) {
+			if (ftp_get($connect_it, $localPath.$contents[$i], "$distantFolder/$contents[$i]", FTP_ASCII)) {
+				//echo "Successfully written-> $distantFolder/$contents[$i]\n";
+			} else {
+        $result = false;
+				//echo "There was a problem with-> $distantFolder/$contents[$i]\n";
+			}
+		}
+		else {
+			mkdir($localPath.$contents[$i],0777,true);
+      //echo "Folder create-> ".$localPath.$contents[$i]."\n";
+			$a = localRecursiveCopy("$distantFolder/$contents[$i]",$localPath.$contents[$i]."/",$connect_it);
+		}
+	}
+  return $result;
 }
 
 /* Create local folder*/
 function createLocalFolder($path){
+  /* FTP Account for local copy folders */
+  // $ftp_host = 'localhost'; /* host */
+  // $ftp_user_name = 'vial-projets'; /* username */
+  // $ftp_user_pass = '3KfA8FZm'; /* password */
+  // /* Connect using basic FTP */
+  // $connect_it = ftp_connect( $ftp_host ) or errorFTP();
+  //  /* Login to FTP */
+  // $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
+  // if($login_result == false){
+  //   print_rJsonData(0,"Login FTP on 'nomades-projets.ch' function 'createLocalFolder' result-> Mot de passe ou login incorrect.");
+  // }
+  //
+  // ftp_chdir($connect_it, './'); // /var/www/uploads
+  // $parts = explode('/',$path); // 2013/06/11/username
+  // foreach($parts as $part){
+  //    if(!ftp_chdir($connect_it, $part)){
+  //       ftp_mkdir($connect_it, $part);
+  //       ftp_chdir($connect_it, $part);
+  //       ftp_chmod($connect_it, 0777, $part);
+  //    }
+  // }
+  // if(!file_exists($path)){
+  //   return false;
+  // }
+  // else {
+  //   return true;
+  // }
+
   if (!mkdir($path, 0777, true)) {
     print_r('Echec lors de la création des répertoires... ');
     return false;
@@ -195,7 +258,7 @@ function print_rJsonData($state,$extract){
 }
 
 /* Change db name in wp_config.php */
-function updateProjectConfig($path,$sqlFile,$projectFolder){
+function updateProjectConfig($path,$sqlFile,$projectFolder,$userName){
 
   //$file = $sqlFile;
   $file = '../'.$sqlFile;
@@ -210,7 +273,6 @@ function updateProjectConfig($path,$sqlFile,$projectFolder){
   //$filePath = "../../projects-eleves/fazio/wordpress/wp-config.php";
   $filePath = "../../".$_POST['params']['folder']."wp-config.php";
   // projects-eleves/fazio/wordpress/
-  // projects-eleves/fazio/wordpress/
   $lookfor = '';
   $newtext = '';
   //$update_wp_config_DB_USER = new Update_WP_Config($filePath,$lookfor,$newtext);
@@ -219,38 +281,26 @@ function updateProjectConfig($path,$sqlFile,$projectFolder){
   $update_wp_config_DB_PASSWORD = new Update_WP_Config($filePath,'superprof',$dbConf['passwd']);
   $update_wp_config_DB_HOST = new Update_WP_Config($filePath,'localhost',$dbConf->host);
 
-
-  //$resultUpdateConfigFile = $update_wp_config_DB_PASSWORD->result;
-  //print_r($update_wp_config->result);
-  // TODO: Test return data
-  // if($update_wp_config_DB_NAME === true){
-  //    return true;
-  // }
-  // else {
-  //   return false;
-  // }
-
   if(
     $update_wp_config_DB_NAME->result === true &&
     $update_wp_config_DB_USER->result === true &&
     $update_wp_config_DB_PASSWORD->result === true
   ){
-
-    // 2: then createSqlBdd of user project
-    $resultCreatSQL = createSqlBdd($file,$dbConf);
-    //return $resultCreatSQL;
-    // if($resultCreatSQL=== true){
-    //   return true;
-    // }
-    // else {
-    //   return false;
-    // }
-    return $resultCreatSQL;
-
+    // 2: TODO ::>> then createSqlBdd of user project
+    // replace local urls & ateliers.nomades.ch urls by the new urls
+    // $lookingFor = "http://www.nomades-projets.ch/~$userName"; // ex: http://ateliers.nomades.ch/~fazio
+    // $replaceBy = "http://www.nomades-projets.ch/projects-eleves/$userName"; // ex: http://www.nomades-projets.ch/projects-eleves/fazio
+    // $updatedSQLdata = new Update_WP_Config($file, $lookingFor, $replaceBy);
+    //
+    // $updatedSQLdata->createSqlBdd($file,$dbConf);
+    //
+    // return $updatedSQLdata;
+    return true;
   }
   else {
     return false;
   }
   //return true;
 }
+
 ?>
