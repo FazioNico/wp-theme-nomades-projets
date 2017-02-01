@@ -1,3 +1,11 @@
+/**
+* @Author: Nicolas Fazio <webmaster-fazio>
+* @Date:   02-11-2016
+* @Email:  contact@nicolasfazio.ch
+* @Last modified by:   webmaster-fazio
+* @Last modified time: 01-02-2017
+*/
+
 import  { WpAjaxCallService } from '../../providers/wp-ajax/wp-ajax'
 
 export class StaticProject{
@@ -83,7 +91,7 @@ export class StaticProject{
   }
 
   displayAjaxResult(ajaxResult){
-    //console.log(ajaxResult)
+    console.log('static displayAjaxResult-> ',ajaxResult)
     let resultSelector = document.getElementById('loadingUI')
     if(resultSelector){
       if(ajaxResult.state == 1){
@@ -94,12 +102,22 @@ export class StaticProject{
           <input name="save" type="submit" class="button button-primary button-large" id="publish" value="Mettre à jour">
         `;
       }
-      else {
-        this.$input.val('');
+      else if (ajaxResult.state == 2){
+        //this.$input.val('');
         resultSelector.innerHTML = `
           <p><b>${ajaxResult.extract}</b></p>
           <hr/>
-          <span id="tryAgain" class="button button-primary button-large">Réessayer</div>
+          <span id="deleteLocalFolder" class="button button-primary button-large">supprimer dossiers temporaires ou existants</span>
+          <span id="tryAgain" class="button button-primary button-large">Réessayer</span>
+        `;
+      }
+      else {
+        //this.$input.val('');
+        resultSelector.innerHTML = `
+          <p><b>${ajaxResult.extract}</b></p>
+          <hr/>
+          <span id="deleteLocalFolder" class="button button-primary button-large">supprimer dossiers temporaires ou existants</span>
+          <span id="tryAgain" class="button button-primary button-large">Réessayer</span>
         `;
       }
 

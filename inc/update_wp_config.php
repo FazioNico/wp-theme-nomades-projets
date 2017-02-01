@@ -4,7 +4,7 @@
 @Date:   26-12-2016
 @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 31-01-2017
+# @Last modified time: 01-02-2017
 */
 
 /*
@@ -26,7 +26,10 @@
     private $lookFor;
     private $newtext;
 
-    function __construct($file,$lookfor,$newtext) {
+    function __construct() {
+    }
+
+    function upd_wp_config_data($file,$lookfor,$newtext) {
 
         $this->newData = array();
         $this->filePath = $file;
@@ -35,6 +38,7 @@
         $this->newText = $newtext;
 
         $result_file_data = $this->search_and_replace();
+        $this->fileData = $result_file_data;
         //print_r($result_file_data);
         if(file_put_contents($this->filePath, $result_file_data) === false){
           $result = false;
@@ -43,20 +47,20 @@
           $result = true;
         };
         $this->result = $result;
-
-        //$resp = file_put_contents($this->filePath, 'ppp');
-        //$this->result = true;
-        //die($resp);
     }
 
-    function search_and_replace(){
+    function search_and_replace($inputFile = true){
+      $dataToForeach = file($this->filePath);
+      if($inputFile != true ){
+        $dataToForeach = $inputFile;
+      }
 
-      foreach (file($this->filePath) as $filerow) {
+      foreach ($dataToForeach as $filerow) {
         $this->newData[] = $this->replace_between($filerow, $this->lookFor, $this->newText);
       }
       if(!$this->newData[0]){
         // TODO: test if is ok
-        $result = $this->filePath;
+        $result = "Error: ".$inputFile;
 
       }
       else {
@@ -70,6 +74,33 @@
       $repl = $replacement;
       $patt = "/$needle/";
       return preg_replace($patt, "". $repl ."", $str);
+    }
+
+
+    function upd_sql_dataTXT($file,$lookfor,$newtext) {
+      //$this->fileData = file($this->filePath);
+      $this->lookFor = $lookfor;
+      $this->newText = $newtext;
+
+      $result_file_data = $this->search_and_replace($file);
+      //$this->fileData = $result_file_data;
+      //print_r($result_file_data);
+      // if(file_put_contents($this->filePath, $result_file_data) === false){
+      //   $result = false;
+      // }
+      // else {
+      //   $result = true;
+      // };
+      //$this->result = $result_file_data;
+      $final = false;
+      if(!empty($result_file_data)){
+        $final = true;
+      }
+      $this->result = $final;
+    }
+
+    function getFileDatas(){
+      return $this->fileData;
     }
 }
 

@@ -3,7 +3,7 @@
 * @Date:   23-11-2016
 * @Email:  contact@nicolasfazio.ch
 * @Last modified by:   webmaster-fazio
-* @Last modified time: 31-01-2017
+* @Last modified time: 01-02-2017
 */
 
 import  { WpAjaxCallService } from '../../providers/wp-ajax/wp-ajax'
@@ -46,6 +46,7 @@ export class StaticSQLProject{
     if(document.getElementById('tryAgain')){
       document.getElementById('tryAgain').addEventListener('click', (event)=>{
         event.preventDefault();
+        //this.deleteLocalFolder(event)
         this.selector.innerHTML = this.defaultSeleletonUI();
         this.loadEventUI()
       })
@@ -65,7 +66,7 @@ export class StaticSQLProject{
       && distantFolderInput.indexOf("~")>0
       && distantFolderInput.indexOf("/")>0
       && pwd.length >=3
-      && sqlFile.files[0]
+      && sqlFile.files
     ){
       let pathName = {
         'userPath': distantFolderInput.split('~')[1].split('/')[0],
@@ -80,13 +81,41 @@ export class StaticSQLProject{
       // Ajax call to WP Action API ->
       //console.info({'action-> ': action, 'params-> ': this.localFolder })
       //this.ajaxCall({'action': action, 'params': this.localFolder });
-      let params = {'folder': this.localFolder, 'password': pwd, 'sqlFile': sqlFile.files[0].name };
-      let ajaxResult = this.wpAjax.ajaxCall({'action': action, 'params': params});
-      ajaxResult.then((data)=>{
-        console.log('AjaxResult -> ', JSON.parse(data))
-        this.displayAjaxResult(JSON.parse(data));
-      })
-      console.log('ajaxCall params -> ', params)
+
+      // Bof Test
+      //Retrieve the first (and only!) File from the FileList object
+      var dataFile = '';
+      var f = sqlFile.files[0];
+      if (f) {
+        var r = new FileReader();
+        r.onload = (e)=> {
+  	      var contents = e.target.result;
+          // alert( "Got the file.n"
+          //       +"name: " + f.name + "n"
+          //       +"type: " + f.type + "n"
+          //       +"size: " + f.size + " bytesn"
+          //       + "starts with: " + contents
+          // );
+          dataFile = contents
+
+          console.log('sqlFile JS -> ', dataFile);
+
+          let params = {'folder': this.localFolder, 'password': pwd, 'sqlFile': dataFile };
+          let ajaxResult = this.wpAjax.ajaxCall({'action': action, 'params': params});
+          ajaxResult.then((data)=>{
+            console.log('AjaxResult -> ', JSON.parse(data))
+            this.displayAjaxResult(JSON.parse(data));
+          })
+          console.log('ajaxCall params -> ', params)
+
+
+        }
+        r.readAsText(f);
+      } else {
+        alert("Failed to load file");
+      }
+      /// Eof test
+
     }
     else{
       console.warn("Les critères ne parsing de l'URL distante ne sont pas respectés (~ /)");
@@ -106,11 +135,21 @@ export class StaticSQLProject{
           <input name="save" type="submit" class="button button-primary button-large" id="publish" value="Mettre à jour">
         `;
       }
-      else {
-        this.$input.val('');
+      else if (ajaxResult.state == 2){
+        //this.$input.val('');
         resultSelector.innerHTML = `
           <p><b>${ajaxResult.extract}</b></p>
           <hr/>
+          <span id="deleteLocalFolder" class="button button-primary button-large">supprimer dossiers temporaires ou existants</div>
+          <span id="tryAgain" class="button button-primary button-large">Réessayer</div>
+        `;
+      }
+      else {
+        //this.$input.val('');
+        resultSelector.innerHTML = `
+          <p><b>${ajaxResult.extract}</b></p>
+          <hr/>
+          <span id="deleteLocalFolder" class="button button-primary button-large">supprimer dossiers temporaires ou existants</div>
           <span id="tryAgain" class="button button-primary button-large">Réessayer</div>
         `;
       }
@@ -126,6 +165,9 @@ export class StaticSQLProject{
     event.preventDefault();
     // console.log(`event-> ${event}`)
     // console.log(`folder-> ${this.localFolder}`)
+    if(this.$input.val().length<=0){
+
+    }
     let params = {'folder': this.localFolder };
     this.wpAjax.ajaxCall({'action': 'delete_local_folder', 'params': params});
     this.localFolder = 'projects-eleves';

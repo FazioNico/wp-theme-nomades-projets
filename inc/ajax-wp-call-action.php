@@ -3,7 +3,7 @@
 # @Date:   03-11-2016
 # @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 31-01-2017
+# @Last modified time: 01-02-2017
 
 add_action( 'wp_ajax_nopriv_copy_distant_folder', 'copy_distant_folder' );
 add_action( 'wp_ajax_copy_distant_folder', 'copy_distant_folder' );
@@ -37,7 +37,8 @@ function copy_distant_folder() {
   //die();
   // 3 Check if $path existe
   if(file_exists($path)){
-    print_r( 'project dir exist! ' );
+    //print_r( 'project dir exist! ' );
+    print_rJsonData(0,"Echec! project dir '$path' exist...");
     die();
   }
   else {
@@ -49,6 +50,7 @@ function copy_distant_folder() {
     $copyResult = copyFolder($path,$projectFolder,$userName,$password);
     // 6 returne the result
     if($copyResult === true){
+    //if(true === true){
       $resultTXT = 'Successfully copyed!';
       $result = 1;
       if(isset($sqlFile)){
@@ -215,7 +217,8 @@ function createLocalFolder($path){
   // }
 
   if (!mkdir($path, 0777, true)) {
-    print_r('Echec lors de la création des répertoires... ');
+    //print_r('Echec lors de la création des répertoires... ');
+    print_rJsonData(0,"Echec lors de la création des répertoires... ");
     return false;
   }
   else {
@@ -253,6 +256,9 @@ function delTree($dir) {
 }
 
 function print_rJsonData($state,$extract){
+  if($state === 2){
+    delete_local_folder();
+  }
   print_r('{"state": '.$state.', "extract": "'.$extract.'"}');
   die();
 }
@@ -261,7 +267,7 @@ function print_rJsonData($state,$extract){
 function updateProjectConfig($path,$sqlFile,$projectFolder,$userName){
 
   //$file = $sqlFile;
-  $file = '../'.$sqlFile;
+  //$file = '../'.$sqlFile.name;
   $dbConf = array(
    'host' => 'localhost',
    'username' => 'fazio',
@@ -276,26 +282,36 @@ function updateProjectConfig($path,$sqlFile,$projectFolder,$userName){
   $lookfor = '';
   $newtext = '';
   //$update_wp_config_DB_USER = new Update_WP_Config($filePath,$lookfor,$newtext);
-  $update_wp_config_DB_NAME = new Update_WP_Config($filePath, 'student_42', $dbConf['dbname']);
-  $update_wp_config_DB_USER = new Update_WP_Config($filePath,'teacher',$dbConf['username']);
-  $update_wp_config_DB_PASSWORD = new Update_WP_Config($filePath,'superprof',$dbConf['passwd']);
-  $update_wp_config_DB_HOST = new Update_WP_Config($filePath,'localhost',$dbConf->host);
 
-  if(
+  $update_wp_config_DB_NAME = new Update_WP_Config();
+  $update_wp_config_DB_NAME->upd_wp_config_data($filePath, 'student_42', $dbConf['dbname']);
+
+  $update_wp_config_DB_USER = new Update_WP_Config();
+  $update_wp_config_DB_USER->upd_wp_config_data($filePath,'teacher',$dbConf['username']);
+
+  $update_wp_config_DB_PASSWORD = new Update_WP_Config();
+  $update_wp_config_DB_PASSWORD->upd_wp_config_data($filePath,'superprof',$dbConf['passwd']);
+
+  $update_wp_config_DB_HOST = new Update_WP_Config();
+  $update_wp_config_DB_HOST->upd_wp_config_data($filePath,'localhost',$dbConf->host);
+
+  if( //true === true
     $update_wp_config_DB_NAME->result === true &&
     $update_wp_config_DB_USER->result === true &&
     $update_wp_config_DB_PASSWORD->result === true
   ){
     // 2: TODO ::>> then createSqlBdd of user project
     // replace local urls & ateliers.nomades.ch urls by the new urls
-    // $lookingFor = "http://www.nomades-projets.ch/~$userName"; // ex: http://ateliers.nomades.ch/~fazio
-    // $replaceBy = "http://www.nomades-projets.ch/projects-eleves/$userName"; // ex: http://www.nomades-projets.ch/projects-eleves/fazio
-    // $updatedSQLdata = new Update_WP_Config($file, $lookingFor, $replaceBy);
+    $lookingFor = "http://ateliers.nomades.ch/~$userName"; // ex: http://ateliers.nomades.ch/~fazio
+    $replaceBy = "http://www.nomades-projets.ch/projects-eleves/$userName"; // ex: http://www.nomades-projets.ch/projects-eleves/fazio
+    $updatedSQLdata = new Update_WP_Config();
+    $updatedSQLdata->upd_sql_dataTXT($sqlFile, $lookingFor, $replaceBy);
     //
     // $updatedSQLdata->createSqlBdd($file,$dbConf);
     //
-    // return $updatedSQLdata;
-    return true;
+    //print_rJsonData($updatedSQLdata->result,'SQL replace result-> '.$updatedSQLdata->result);
+  	//die();
+    return $updatedSQLdata->result;
   }
   else {
     return false;

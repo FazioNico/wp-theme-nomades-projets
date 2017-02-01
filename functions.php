@@ -1,4 +1,10 @@
 <?php
+# @Author: Nicolas Fazio <webmaster-fazio>
+# @Date:   28-09-2016
+# @Email:  contact@nicolasfazio.ch
+# @Last modified by:   webmaster-fazio
+# @Last modified time: 01-02-2017
+
 /**
  * Nomades Projets functions and definitions.
  *
@@ -104,8 +110,8 @@ add_action( 'widgets_init', 'nomades_projets_widgets_init' );
 function nomades_projets_scripts() {
 	////// from Gulp task
 	wp_enqueue_style( 'gulp-style', get_stylesheet_uri() );
-	wp_enqueue_script( 'gulp-jsDepencencies', get_template_directory_uri() . '/js/bundle.min.js', array(), '20151215', true );
-	wp_enqueue_script( 'gulp-javascript', get_template_directory_uri() . '/js/app.min.js', array(), '20151215', true );
+	wp_enqueue_script( 'gulp-jsDepencencies', get_template_directory_uri() . '/js/bundle.min.js', array(), time(), true );
+	wp_enqueue_script( 'gulp-javascript', get_template_directory_uri() . '/js/app.min.js', array(), time(), true );
 	/////
 	//wp_enqueue_script( 'nomades-projets-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 	//wp_enqueue_script( 'nomades-projets-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
