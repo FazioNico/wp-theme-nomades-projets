@@ -3,7 +3,7 @@
 * @Date:   03-11-2016
 * @Email:  contact@nicolasfazio.ch
 * @Last modified by:   webmaster-fazio
-* @Last modified time: 01-02-2017
+* @Last modified time: 03-02-2017
 */
 
 export class WpAjaxCallService{
@@ -33,8 +33,8 @@ export class WpAjaxCallService{
 
   ajaxResponse(response){
     console.log('Ajax Response debug-> ', response);
-    let ajaxResult = JSON.parse(response)
-    console.log(ajaxResult);
-    return ajaxResult;
+    //let ajaxResult = JSON.parse(response)
+    //console.log(ajaxResult);
+    return response;
   }
 }

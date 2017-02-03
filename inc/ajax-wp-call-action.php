@@ -3,7 +3,7 @@
 # @Date:   03-11-2016
 # @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 01-02-2017
+# @Last modified time: 03-02-2017
 
 add_action( 'wp_ajax_nopriv_copy_distant_folder', 'copy_distant_folder' );
 add_action( 'wp_ajax_copy_distant_folder', 'copy_distant_folder' );
@@ -50,7 +50,7 @@ function copy_distant_folder() {
     $copyResult = copyFolder($path,$projectFolder,$userName,$password);
     // 6 returne the result
     if($copyResult === true){
-    //if(true === true){
+    // if(true === true){
       $resultTXT = 'Successfully copyed!';
       $result = 1;
       if(isset($sqlFile)){
@@ -188,34 +188,6 @@ function prodRecursiveCopy($distantFolder,$localPath){
 
 /* Create local folder*/
 function createLocalFolder($path){
-  /* FTP Account for local copy folders */
-  // $ftp_host = ''; /* host */
-  // $ftp_user_name = ''; /* username */
-  // $ftp_user_pass = ''; /* password */
-  // /* Connect using basic FTP */
-  // $connect_it = ftp_connect( $ftp_host ) or errorFTP();
-  //  /* Login to FTP */
-  // $login_result = ftp_login( $connect_it, $ftp_user_name, $ftp_user_pass );
-  // if($login_result == false){
-  //   print_rJsonData(0,"Login FTP on 'nomades-projets.ch' function 'createLocalFolder' result-> Mot de passe ou login incorrect.");
-  // }
-  //
-  // ftp_chdir($connect_it, './'); // /var/www/uploads
-  // $parts = explode('/',$path); // 2013/06/11/username
-  // foreach($parts as $part){
-  //    if(!ftp_chdir($connect_it, $part)){
-  //       ftp_mkdir($connect_it, $part);
-  //       ftp_chdir($connect_it, $part);
-  //       ftp_chmod($connect_it, 0777, $part);
-  //    }
-  // }
-  // if(!file_exists($path)){
-  //   return false;
-  // }
-  // else {
-  //   return true;
-  // }
-
   if (!mkdir($path, 0777, true)) {
     //print_r('Echec lors de la création des répertoires... ');
     print_rJsonData(0,"Echec lors de la création des répertoires... ");
@@ -270,9 +242,9 @@ function updateProjectConfig($path,$sqlFile,$projectFolder,$userName){
   //$file = '../'.$sqlFile.name;
   $dbConf = array(
    'host' => 'localhost',
-   'username' => 'fazio',
-   'passwd' => '',
-   'dbname' => 'import_test',
+   'username' => 'projets_user',
+   'passwd' => 'user_projets',
+   'dbname' => 'site_projets',
    'port' => '3306' // 3306
   );
   // 1: First update wp_config.php with the right db config name and prefix
@@ -293,7 +265,7 @@ function updateProjectConfig($path,$sqlFile,$projectFolder,$userName){
   $update_wp_config_DB_PASSWORD->upd_wp_config_data($filePath,'superprof',$dbConf['passwd']);
 
   $update_wp_config_DB_HOST = new Update_WP_Config();
-  $update_wp_config_DB_HOST->upd_wp_config_data($filePath,'localhost',$dbConf->host);
+  $update_wp_config_DB_HOST->upd_wp_config_data($filePath,'localhost',$dbConf['host']);
 
   if( //true === true
     $update_wp_config_DB_NAME->result === true &&
@@ -301,22 +273,17 @@ function updateProjectConfig($path,$sqlFile,$projectFolder,$userName){
     $update_wp_config_DB_PASSWORD->result === true
   ){
     // 2: TODO ::>> then createSqlBdd of user project
-    // replace local urls & ateliers.nomades.ch urls by the new urls
-    $lookingFor = "http://ateliers.nomades.ch/~$userName"; // ex: http://ateliers.nomades.ch/~fazio
-    $replaceBy = "http://www.nomades-projets.ch/projects-eleves/$userName"; // ex: http://www.nomades-projets.ch/projects-eleves/fazio
-    $updatedSQLdata = new Update_WP_Config();
-    $updatedSQLdata->upd_sql_dataTXT($sqlFile, $lookingFor, $replaceBy);
+    $createSQL = new Update_WP_Config();
+    $bddResult = $createSQL->createSqlBdd(stripslashes($sqlFile),$dbConf);
     //
-    // $updatedSQLdata->createSqlBdd($file,$dbConf);
-    //
-    //print_rJsonData($updatedSQLdata->result,'SQL replace result-> '.$updatedSQLdata->result);
-  	//die();
-    return $updatedSQLdata->result;
+    //print_rJsonData($bddResult,'SQL create with success!');
+  	//die(stripslashes($sqlFile));
+    // return true;
+    return $bddResult;
   }
   else {
     return false;
   }
-  //return true;
 }
 
 ?>

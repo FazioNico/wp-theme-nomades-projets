@@ -4,7 +4,7 @@
 @Date:   26-12-2016
 @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 01-02-2017
+# @Last modified time: 02-02-2017
 */
 
 /*
@@ -83,7 +83,7 @@
       $this->newText = $newtext;
 
       $result_file_data = $this->search_and_replace($file);
-      //$this->fileData = $result_file_data;
+      $this->fileData = $result_file_data;
       //print_r($result_file_data);
       // if(file_put_contents($this->filePath, $result_file_data) === false){
       //   $result = false;
@@ -102,37 +102,37 @@
     function getFileDatas(){
       return $this->fileData;
     }
-}
+    /*
+      Bof -
+      Function to create user project SQL ddb on Nomade Server
+      EXEMPLE USAGE:
+        $file = 'student_42.sql';
+        $dbConf = array(
+         'host' => 'localhost',
+         'username' => 'fazio',
+         'passwd' => '',
+         'dbname' => 'import_test',
+         'port' => '3306' // 3306
+        );
+        print_r(createSqlBdd($sqlData,$dbConf));
+    */
 
-/*
-  Bof -
-  Function to create user project SQL ddb on Nomade Server
-  EXEMPLE USAGE:
-    $file = 'student_42.sql';
-    $dbConf = array(
-     'host' => 'localhost',
-     'username' => 'fazio',
-     'passwd' => '',
-     'dbname' => 'import_test',
-     'port' => '3306' // 3306
-    );
-    print_r(createSqlBdd($file,$dbConf));
-*/
-function createSqlBdd($file,$dbConf){
-  try {
-      $db = new PDO('mysql: host='.$dbConf['host'].';dbname='.$dbConf['dbname'], $dbConf['username'], $dbConf['passwd']);
-      //$db = new PDO($dsn, $user, $password);
-      $sql = file_get_contents($file);
-      $qr = $db->exec($sql) ;//or die(print_r($db->errorInfo(), true));
-      return true;
-  } catch (PDOException $e) {
-      //print_r( "Error: " . $e->getMessage());
-      //die();
-      return false;
-  }
-}
+    function createSqlBdd($sqlData,$dbConf){
+      try {
+          $db = new PDO('mysql: host='.$dbConf['host'].';dbname='.$dbConf['dbname'], $dbConf['username'], $dbConf['passwd']);
+          // $sql = file_get_contents($sqlData); // using for reading data into a file
+          $sql = $sqlData;
+          $qr = $db->exec($sql) ;//or die(print_r($db->errorInfo(), true));
+          return true;
+      } catch (PDOException $e) {
+          print_r( "Error: " . $e->getMessage());
+          die();
+          return false;
+      }
+    }
 
-/*
-  Eof -
-  Function to create user project SQL ddb on Nomade Server
-*/
+    /*
+      Eof -
+      Function to create user project SQL ddb on Nomade Server
+    */
+}

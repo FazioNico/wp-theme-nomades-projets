@@ -3,7 +3,7 @@
 * @Date:   23-11-2016
 * @Email:  contact@nicolasfazio.ch
 * @Last modified by:   webmaster-fazio
-* @Last modified time: 01-02-2017
+* @Last modified time: 02-02-2017
 */
 
 import  { WpAjaxCallService } from '../../providers/wp-ajax/wp-ajax'
@@ -96,9 +96,9 @@ export class StaticSQLProject{
           //       +"size: " + f.size + " bytesn"
           //       + "starts with: " + contents
           // );
-          dataFile = contents
-
-          console.log('sqlFile JS -> ', dataFile);
+          //dataFile = contents /// \
+          let dataFile = contents.replace(/http:\/\/ateliers.nomades.ch\/~/g, "http://www.nomades-projets.ch/projects-eleves/")
+          //console.log('sqlFile JS -> ', dataFile);
 
           let params = {'folder': this.localFolder, 'password': pwd, 'sqlFile': dataFile };
           let ajaxResult = this.wpAjax.ajaxCall({'action': action, 'params': params});
