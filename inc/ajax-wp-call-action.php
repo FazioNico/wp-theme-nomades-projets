@@ -3,7 +3,7 @@
 # @Date:   03-11-2016
 # @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 03-02-2017
+# @Last modified time: 14-02-2017
 
 add_action( 'wp_ajax_nopriv_copy_distant_folder', 'copy_distant_folder' );
 add_action( 'wp_ajax_copy_distant_folder', 'copy_distant_folder' );
@@ -55,7 +55,12 @@ function copy_distant_folder() {
       $result = 1;
       if(isset($sqlFile)){
         // 7 createSqlBdd & update wp_config.php
-        $resultUpdateProject = updateProjectConfig($path,$sqlFile,$projectFolder, $userName);
+        $userDB_conf = array(
+         'username' => $_POST['params']['sqlUSER'],
+         'passwd' => $_POST['params']['sqlPASS'],
+         'dbname' => $_POST['params']['sqlDB']
+        );
+        $resultUpdateProject = updateProjectConfig($path,$sqlFile,$projectFolder, $userName, $userDB_conf);
         if($resultUpdateProject === true){
           $resultTXT = 'All run task finish with success!!';
         }
@@ -236,10 +241,16 @@ function print_rJsonData($state,$extract){
 }
 
 /* Change db name in wp_config.php */
-function updateProjectConfig($path,$sqlFile,$projectFolder,$userName){
+function updateProjectConfig($path,$sqlFile,$projectFolder,$userName, $userDB_conf){
 
   //$file = $sqlFile;
   //$file = '../'.$sqlFile.name;
+
+  // default local config:
+  // student_42
+  // teacher
+  // superprof
+
   $dbConf = array(
    'host' => 'localhost',
    'username' => 'projets_user',
@@ -256,13 +267,13 @@ function updateProjectConfig($path,$sqlFile,$projectFolder,$userName){
   //$update_wp_config_DB_USER = new Update_WP_Config($filePath,$lookfor,$newtext);
 
   $update_wp_config_DB_NAME = new Update_WP_Config();
-  $update_wp_config_DB_NAME->upd_wp_config_data($filePath, 'student_42', $dbConf['dbname']);
+  $update_wp_config_DB_NAME->upd_wp_config_data($filePath, $userDB_conf['dbname'], $dbConf['dbname']);
 
   $update_wp_config_DB_USER = new Update_WP_Config();
-  $update_wp_config_DB_USER->upd_wp_config_data($filePath,'teacher',$dbConf['username']);
+  $update_wp_config_DB_USER->upd_wp_config_data($filePath,$userDB_conf['username'],$dbConf['username']);
 
   $update_wp_config_DB_PASSWORD = new Update_WP_Config();
-  $update_wp_config_DB_PASSWORD->upd_wp_config_data($filePath,'superprof',$dbConf['passwd']);
+  $update_wp_config_DB_PASSWORD->upd_wp_config_data($filePath,$userDB_conf['passwd'],$dbConf['passwd']);
 
   $update_wp_config_DB_HOST = new Update_WP_Config();
   $update_wp_config_DB_HOST->upd_wp_config_data($filePath,'localhost',$dbConf['host']);
