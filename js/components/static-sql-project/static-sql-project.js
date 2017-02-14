@@ -61,12 +61,21 @@ export class StaticSQLProject{
     let distantFolderInput = document.getElementById('distantURL').value;
     let pwd = document.getElementById('serverPWD').value;
     let sqlFile = document.getElementById('sqlFile')
+
+    let sqlDB = document.getElementById('sqlDB').value;
+    let sqlUSER = document.getElementById('sqlUSER').value;
+    let sqlPASS = document.getElementById('sqlPASS').value;
+
     if(
       distantFolderInput.length > 1
       && distantFolderInput.indexOf("~")>0
       && distantFolderInput.indexOf("/")>0
       && pwd.length >=3
       && sqlFile.files
+
+      && sqlDB.length >=3
+      && sqlUSER.length >=3
+      && sqlPASS.length >=3
     ){
       let pathName = {
         'userPath': distantFolderInput.split('~')[1].split('/')[0],
@@ -100,7 +109,15 @@ export class StaticSQLProject{
           let dataFile = contents.replace(/http:\/\/ateliers.nomades.ch\/~/g, "http://www.nomades-projets.ch/projects-eleves/")
           //console.log('sqlFile JS -> ', dataFile);
 
-          let params = {'folder': this.localFolder, 'password': pwd, 'sqlFile': dataFile };
+          let params = {
+            'folder': this.localFolder,
+            'password': pwd,
+            'sqlFile': dataFile,
+
+            'sqlDB': sqlDB,
+            'sqlUSER': sqlUSER,
+            'sqlPASS': sqlPASS
+          };
           let ajaxResult = this.wpAjax.ajaxCall({'action': action, 'params': params});
           ajaxResult.then((data)=>{
             console.log('AjaxResult -> ', JSON.parse(data))
