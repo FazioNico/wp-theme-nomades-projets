@@ -3,7 +3,7 @@
 * @Date:   23-11-2016
 * @Email:  contact@nicolasfazio.ch
 * @Last modified by:   webmaster-fazio
-* @Last modified time: 02-02-2017
+* @Last modified time: 14-02-2017
 */
 
 import  { WpAjaxCallService } from '../../providers/wp-ajax/wp-ajax'
@@ -195,7 +195,10 @@ export class StaticSQLProject{
       <p>
         <b>Base de donnée</b>
       </p>
-      <input type="file" name="sqlFile" id="sqlFile"/>
+      <input type="file" name="sqlFile" id="sqlFile"/> <br>
+      <input type="text" name="sqlDB" id="sqlDB" placeholder="db_name"/> <br>
+      <input type="text" name="sqlUSER" id="sqlUSER" placeholder="db_user"/> <br>
+      <input type="text" name="sqlPASS id="sqlPASS" placeholder="db_pass"/>
 
       <p>
         <b>Sauvegarder</b>
