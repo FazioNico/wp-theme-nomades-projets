@@ -3,7 +3,7 @@
 # @Date:   03-11-2016
 # @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 14-02-2017
+# @Last modified time: 14-03-2017
 
 add_action( 'wp_ajax_nopriv_copy_distant_folder', 'copy_distant_folder' );
 add_action( 'wp_ajax_copy_distant_folder', 'copy_distant_folder' );
@@ -142,12 +142,23 @@ function localRecursiveCopy($distantFolder,$localPath, $connect_it){
   $contents = ftp_nlist($connect_it, $distantFolder);
   for($i=0; $i<count($contents); $i++) {
 		if (strstr($contents[$i], ".") !== FALSE) {
-			if (ftp_get($connect_it, $localPath.$contents[$i], "$distantFolder/$contents[$i]", FTP_ASCII)) {
-				//echo "Successfully written-> $distantFolder/$contents[$i]\n";
-			} else {
+
+      // check for media file
+      $file_parts = pathinfo($contents[$i]);
+      $file_parts['extension'];
+      $cool_extensions = Array('jpg', 'jpeg', 'png', 'mp3', 'mp4', 'mov', 'pfd');
+
+      $ftp_mode = FTP_ASCII; // default ftp mode
+      if (in_array($file_parts['extension'], $cool_extensions)){
+        $ftp_mode = FTP_BINARY;
+      }
+      if (ftp_get($connect_it, $localPath.$contents[$i], "$distantFolder/$contents[$i]", $ftp_mode)) {
+        //echo "Successfully written-> $distantFolder/$contents[$i]\n";
+      } else {
         $result = false;
-				//echo "There was a problem with-> $distantFolder/$contents[$i]\n";
-			}
+        //echo "There was a problem with-> $distantFolder/$contents[$i]\n";
+      }
+
 		}
 		else {
 			mkdir($localPath.$contents[$i],0777,true);
