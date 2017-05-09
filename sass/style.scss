@@ -1,3 +1,9 @@
+// @Author: Nicolas Fazio <webmaster-fazio>
+// @Date:   28-09-2016
+// @Email:  contact@nicolasfazio.ch
+// @Last modified by:   webmaster-fazio
+// @Last modified time: 18-04-2017
+
 /*!
 Theme Name: Nomades Projets
 Theme URI: http://underscores.me/
@@ -162,3 +168,18 @@ h1.site-title  {
     top: 5px;
 		height: 50px;
 }
+
+// Header Project Page
+.projet-eleve-page .entry-header {
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+.projet-eleve-page .entry-header h1 {
+	    margin: 0px!important;
+	    padding: 0px;
+}
+
+.projet-eleve-page .entry-header p.flow-text.entry-title, .projet-eleve-page .entry-header p {
+	    margin: 0px;
+	    padding: 2px;
+	}

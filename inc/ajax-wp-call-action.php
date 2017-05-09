@@ -3,7 +3,7 @@
 # @Date:   03-11-2016
 # @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 14-03-2017
+# @Last modified time: 18-04-2017
 
 add_action( 'wp_ajax_nopriv_copy_distant_folder', 'copy_distant_folder' );
 add_action( 'wp_ajax_copy_distant_folder', 'copy_distant_folder' );
@@ -100,7 +100,7 @@ function copyFolder($path,$remotePath,$userName,$password){
   $result = false;
   $copyResult = flase;
   /* FTP Account */
-  $ftp_host = 'filesrv.ateliers.nomades.ch'; /* host */
+  $ftp_host = 'ateliers.nomades.ch'; /* host */
   $ftp_user_name = $userName; /* username */
   $ftp_user_pass = $password; /* password */
   /* Connect using basic FTP */

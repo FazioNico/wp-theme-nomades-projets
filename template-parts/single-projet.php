@@ -1,4 +1,10 @@
 <?php
+# @Author: Nicolas Fazio <webmaster-fazio>
+# @Date:   05-10-2016
+# @Email:  contact@nicolasfazio.ch
+# @Last modified by:   webmaster-fazio
+# @Last modified time: 09-05-2017
+
 /**
  * Template part for displaying PROJET IN SINGLE PAGE.
  *
@@ -10,26 +16,56 @@
  $mention = $customMetaPost["mention"][0];
  $project_year = $customMetaPost["project_year"][0];
  $eleve = get_the_terms($post->ID, 'eleves', '', ', ','')[0]->name;
- $url_projet = $customMetaPost["url_projet"][0];
- $url_pageProjet = esc_url( get_permalink() );
- $imgURL = 'https://placeholdit.imgix.net/~text?txtsize=33&txt=300%C3%97150&w=300&h=150';
-
+ $url_pageProjet = '../../../../'.$customMetaPost['url_projet'][0]; //esc_url( get_permalink() );
+ $defaultImgURL = 'https://placeholdit.imgix.net/~text?txtsize=33&txt=300%C3%97150&w=300&h=150';
+ switch ($mention) {
+   case 0:
+     $mentionTitle = 'Projet non certifié';
+     break;
+   case 1:
+     $mentionTitle = 'Certification';
+     break;
+   case 2:
+     $mentionTitle = 'Mention Bien';
+     break;
+   case 3:
+     $mentionTitle = 'Mention Très Bien';
+     break;
+ }
  //echo('Single: single-projet.php');
 ?>
-<article class="">
+<article class="projet-eleve-page">
 	<header class="entry-header">
-			<h1 class="entry-title"><?php print($eleve);?></h1>
+      <?php
+        the_title( '<h1><span class="text-primary">', '</span></h1>' );
+      ?>
+      <p><?php  echo $mentionTitle;?></p>
+			<p><?php print($eleve);?></p>
 	</header>
 	<div class="entry-content">
 		<?php
-			the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' );
-			print('
-				<div class="thumb-projet img-responsive" >
-					<a class="text-primary" href="'.$url_pageProjet.'" title="projet">
-						<img src="'.$imgURL.'" alt="Projet de '.$eleve.'" />
-					</a>
-				</div>
-			');
+      //echo ('<a class="text-primary" href="'.$url_pageProjet.'" title="projet">voir le projet</a>');
+			$images = get_attached_media( 'image', $post->ID );
+      if(count($images)<=0){
+        print('
+          <div class="thumb-projet img-responsive" >
+            <a class="text-primary" href="'.$url_pageProjet.'" title="'.get_the_title().'" target="_blank">
+              <img src="'.$defaultImgURL.'" class="responsive-img" alt="Projet de '.$eleve.'" />
+            </a>
+          </div>
+        ');
+      }
+      foreach($images as $image) {
+          //echo '<img src="'.wp_get_attachment_image_src($image->ID,'full')[0].'" />';
+          print('
+    				<div class="thumb-projet img-responsive" >
+    					<a class="text-primary" href="'.$url_pageProjet.'" title="'.get_the_title().'" target="_blank">
+    						<img src="'.wp_get_attachment_image_src($image->ID,'full')[0].'" class="responsive-img" alt="Projet de '.$eleve.'" />
+    					</a>
+    				</div>
+    			');
+      }
+
 		?>
 	</div>
 

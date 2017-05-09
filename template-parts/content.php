@@ -1,4 +1,10 @@
 <?php
+# @Author: Nicolas Fazio <webmaster-fazio>
+# @Date:   28-09-2016
+# @Email:  contact@nicolasfazio.ch
+# @Last modified by:   webmaster-fazio
+# @Last modified time: 18-04-2017
+
 /**
  * Template part for displaying posts.
  *

@@ -1,4 +1,10 @@
 <?php
+# @Author: Nicolas Fazio <webmaster-fazio>
+# @Date:   07-10-2016
+# @Email:  contact@nicolasfazio.ch
+# @Last modified by:   webmaster-fazio
+# @Last modified time: 09-05-2017
+
 /**
  * Template part for displaying loop post
  * Only use with custome wpQuery:  post_type: projet
@@ -53,7 +59,7 @@
   $eleve = get_the_terms($post->ID, 'eleves', '', ', ','')[0]->name;
   $url_projet = $customMetaPost["url_projet"][0];
   $url_pageProjet = esc_url( get_permalink() );
-  $imgURL = 'https://placeholdit.imgix.net/~text?txtsize=33&txt=300%C3%97150&w=300&h=150';
+  $defaultImgURL = 'https://placeholdit.imgix.net/~text?txtsize=33&txt=300%C3%97150&w=300&h=150';
   //var_dump($mention);
   //var_dump($project_year);
   //var_dump($eleve);
@@ -87,6 +93,34 @@
                       </div>
                     ');
                   }
+                }
+                if($counter <3){
+                  $rest = 3 - $counter;
+                  //print_r($rest.'-'.$counter);
+                  while($counter <= $rest) {
+                      print_r('
+                        <div class="thumb-projet col col-sm-4" >
+                          <a class="text-primary" href="'.$url_pageProjet.'" title="'.get_the_title().'" target="_blank">
+                            <img class="img-responsive" src="'.$defaultImgURL.'" alt="Projet de '.$eleve.'" />
+                          </a>
+                        </div>
+                      ');
+                      $counter++;
+                  }
+                }
+              }
+              else {
+                $rest = 2 - $counter;
+                //print_r($rest.'-'.$counter);
+                while($counter <= $rest) {
+                    print_r('
+                      <div class="thumb-projet col col-sm-4" >
+                        <a class="text-primary" href="'.$url_pageProjet.'" title="'.get_the_title().'" target="_blank">
+                          <img class="img-responsive" src="'.$defaultImgURL.'" alt="Projet de '.$eleve.'" />
+                        </a>
+                      </div>
+                    ');
+                    $counter++;
                 }
               }
               //the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' );

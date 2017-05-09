@@ -1,4 +1,10 @@
 <?php
+# @Author: Nicolas Fazio <webmaster-fazio>
+# @Date:   01-11-2016
+# @Email:  contact@nicolasfazio.ch
+# @Last modified by:   webmaster-fazio
+# @Last modified time: 09-05-2017
+
 /**
  * Nomades Projets functions and definitions.
  * for Custom Post Type 'Projet'
@@ -100,8 +106,11 @@ function field_project_render_image_attachment_box($post) {
 		            $existing_image_url = $arr_existing_image[0];
 		            echo '<img data-id="'.$attachment->ID.'" style="width:100%;max-width:200px;" src="' . $existing_image_url . '" />';
         }
+				echo '<p><i>(cliquer sur une image pour la supprimer)</i></p>';
 				echo '</div>';
     }
+		echo '<hr/>';
+		echo '<h2 style="margin-left:-10px;"><b>Ajouter des images</b></h2>';
 		// exit();
 		// /**
 		// *
@@ -133,7 +142,7 @@ function field_project_render_image_attachment_box($post) {
 		// **/
 
 
-		echo 'Upload an image: <input type="file" name="file_upload[]" id="file_upload" multiple="multiple"/>';
+		echo '<label>Choisir des images: </label><br /><input type="file" name="file_upload[]" id="file_upload" multiple="multiple"/>';
     // See if there's a status message to display (we're using this to show errors during the upload process, though we should probably be using the WP_error class)
     $status_message = get_post_meta($post->ID,'_xxxx_attached_image_upload_feedback', true);
     // Show an error message if there is one
@@ -306,7 +315,7 @@ function admin_init(){ //initialisation des champs spécifiques
 	 add_meta_box("field_project_type", "Type de Projet", "field_project_type", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction mention()
 
 	 // img reader & saver
-	 add_meta_box('field_project_render_image_attachment_box', 'Upload Image', 'field_project_render_image_attachment_box', 'projet', 'normal', 'high');
+	 add_meta_box('field_project_render_image_attachment_box', 'Liste des Images', 'field_project_render_image_attachment_box', 'projet', 'normal', 'high');
 	 //add_meta_box("displayAttachedImg", "Images du projet", "displayAttachedImg", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction custom_thumbnail()
 
 	 add_meta_box("field_mention", "Mentions", "field_mention", "projet", "normal", "low");  //il s'agit de notre champ personnalisé qui apelera la fonction mention()
