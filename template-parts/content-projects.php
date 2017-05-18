@@ -3,7 +3,7 @@
 # @Date:   07-10-2016
 # @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 09-05-2017
+# @Last modified time: 18-05-2017
 
 /**
  * Template part for displaying loop post
@@ -100,7 +100,7 @@
                   while($counter <= $rest) {
                       print_r('
                         <div class="thumb-projet col col-sm-4" >
-                          <a class="text-primary" href="'.$url_pageProjet.'" title="'.get_the_title().'" target="_blank">
+                          <a class="text-primary" href="'.$url_pageProjet.'" title="'.get_the_title().'">
                             <img class="img-responsive" src="'.$defaultImgURL.'" alt="Projet de '.$eleve.'" />
                           </a>
                         </div>
@@ -115,7 +115,7 @@
                 while($counter <= $rest) {
                     print_r('
                       <div class="thumb-projet col col-sm-4" >
-                        <a class="text-primary" href="'.$url_pageProjet.'" title="'.get_the_title().'" target="_blank">
+                        <a class="text-primary" href="'.$url_pageProjet.'" title="'.get_the_title().'">
                           <img class="img-responsive" src="'.$defaultImgURL.'" alt="Projet de '.$eleve.'" />
                         </a>
                       </div>

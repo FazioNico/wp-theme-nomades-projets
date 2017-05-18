@@ -3,7 +3,7 @@
 # @Date:   01-11-2016
 # @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 09-05-2017
+# @Last modified time: 11-05-2017
 
 /**
  * Nomades Projets functions and definitions.
@@ -109,6 +109,15 @@ function field_project_render_image_attachment_box($post) {
 				echo '<p><i>(cliquer sur une image pour la supprimer)</i></p>';
 				echo '</div>';
     }
+		else {
+			echo "
+			<div>
+				<p>
+					Pas d'images actuellement.
+				</p>
+			</div>
+			";
+		}
 		echo '<hr/>';
 		echo '<h2 style="margin-left:-10px;"><b>Ajouter des images</b></h2>';
 		// exit();
@@ -141,8 +150,10 @@ function field_project_render_image_attachment_box($post) {
 		// * Eof - Simple uploader file
 		// **/
 
-
-		echo '<label>Choisir des images: </label><br /><input type="file" name="file_upload[]" id="file_upload" multiple="multiple"/>';
+		echo '
+			<input type="file" name="file_upload[]" id="file_upload" class="inputfile" multiple="multiple"/>
+			<label style="display:none;" for="file_upload">Choisir des images: </label>
+		';
     // See if there's a status message to display (we're using this to show errors during the upload process, though we should probably be using the WP_error class)
     $status_message = get_post_meta($post->ID,'_xxxx_attached_image_upload_feedback', true);
     // Show an error message if there is one

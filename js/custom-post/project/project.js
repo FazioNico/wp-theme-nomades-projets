@@ -1,7 +1,14 @@
+/**
+ * @Author: Nicolas Fazio <webmaster-fazio>
+ * @Date:   02-11-2016
+ * @Email:  contact@nicolasfazio.ch
+ * @Last modified by:   webmaster-fazio
+ * @Last modified time: 18-05-2017
+ */
 
 import  { StaticProject } from '../../components/static-project/static-project';
 import  { StaticSQLProject } from '../../components/static-sql-project/static-sql-project';
-//import  { AtypikProject } from '../../components/atypik-project/atypik-project';
+import  { AtypicProject } from '../../components/atypic-project/atypic-project';
 
 export class ProjectPostType {
 
@@ -26,7 +33,7 @@ export class ProjectPostType {
   checkProjectType(){
     let project_type = jQuery('input[name=project_type]:checked').val();
     jQuery('#controle-project_type').css({
-        'border': 'solid 1px #eee',
+        'border-top': 'solid 1px #eee',
         'padding': '10px'
     });
     switch (project_type) {
@@ -38,8 +45,8 @@ export class ProjectPostType {
         //document.getElementById('controle-project_type').innerHTML = project_type;
         break;
       case 'atypique':
-        //new AtypikProject();
-        document.getElementById('controle-project_type').innerHTML = project_type;
+        new AtypicProject();
+        // document.getElementById('controle-project_type').innerHTML = project_type;
         break;
     }
   }

@@ -3,7 +3,7 @@
 # @Date:   05-10-2016
 # @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 09-05-2017
+# @Last modified time: 18-05-2017
 
 /**
  * Template part for displaying PROJET IN SINGLE PAGE.
@@ -14,9 +14,15 @@
  */
  $customMetaPost = get_post_custom($post->ID);
  $mention = $customMetaPost["mention"][0];
+ $type = $customMetaPost["project_type"][0];
+ if($type === 'atypique'){
+   $url_pageProjet = $customMetaPost['url_projet'][0]; //esc_url( get_permalink() );
+ }
+ else {
+   $url_pageProjet = '../../../../'.$customMetaPost['url_projet'][0]; //esc_url( get_permalink() );
+ }
  $project_year = $customMetaPost["project_year"][0];
  $eleve = get_the_terms($post->ID, 'eleves', '', ', ','')[0]->name;
- $url_pageProjet = '../../../../'.$customMetaPost['url_projet'][0]; //esc_url( get_permalink() );
  $defaultImgURL = 'https://placeholdit.imgix.net/~text?txtsize=33&txt=300%C3%97150&w=300&h=150';
  switch ($mention) {
    case 0:
