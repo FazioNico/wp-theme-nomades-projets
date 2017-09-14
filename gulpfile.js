@@ -1,3 +1,11 @@
+/**
+ * @Author: Nicolas Fazio <webmaster-fazio>
+ * @Date:   28-09-2016
+ * @Email:  contact@nicolasfazio.ch
+ * @Last modified by:   webmaster-fazio
+ * @Last modified time: 01-06-2017
+ */
+
 var gulp              = require('gulp'),
     browserSync       = require('browser-sync').create(),
     reload            = browserSync.reload,

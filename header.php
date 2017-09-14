@@ -1,4 +1,10 @@
 <?php
+# @Author: Nicolas Fazio <webmaster-fazio>
+# @Date:   28-09-2016
+# @Email:  contact@nicolasfazio.ch
+# @Last modified by:   webmaster-fazio
+# @Last modified time: 31-07-2017
+
 /**
  * The header for our theme.
  *
@@ -26,12 +32,22 @@
 		<div class="site-branding">
 			<div class="row">
 				<div class="col-sm-4">
-					<h1 class="site-title">
-						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
-							TRAVAUX DE PROJET
-							<?php //bloginfo( 'name' ); ?>
-						</a>
-					</h1>
+<?php if ( is_front_page() ) :?>
+	<h1 class="site-title">
+		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+			TRAVAUX DE PROJET
+			<?php //bloginfo( 'name' ); ?>
+		</a>
+	</h1>
+<?php else :?>
+	<span class="site-title">
+		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+			TRAVAUX DE PROJET
+			<?php //bloginfo( 'name' ); ?>
+		</a>
+	</span>
+<?php endif;?>
+
 				</div>
 				<div class="col-sm-4">
 					<div id="header-logo">
@@ -42,7 +58,13 @@
 					</div>
 				</div>
 				<div class="header-search-form col-sm-4">
-					<?php get_search_form();?>
+					<div class="">
+						<div class="hide">
+							<?php get_search_form();?>
+						</div>
+
+					</div>
+
 				</div>
 			</div>
 

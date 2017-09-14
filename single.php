@@ -1,4 +1,10 @@
 <?php
+# @Author: Nicolas Fazio <webmaster-fazio>
+# @Date:   28-09-2016
+# @Email:  contact@nicolasfazio.ch
+# @Last modified by:   webmaster-fazio
+# @Last modified time: 26-06-2017
+
 /**
  * The template for displaying all single posts.
  *
@@ -9,7 +15,7 @@
 
 get_header(); ?>
 
-<div class="conatainer">
+<div class="conatainer hide">
   <div class="row">
     <div class="col col-sm-4">
       <aside class="menu-secondary">

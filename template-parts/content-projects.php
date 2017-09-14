@@ -3,7 +3,7 @@
 # @Date:   07-10-2016
 # @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 18-05-2017
+# @Last modified time: 14-09-2017
 
 /**
  * Template part for displaying loop post
@@ -71,8 +71,9 @@
         <div class="entry-content">
           <?php
             (!empty($mentionTitle) ? print_r('<span class="lighten-text">'.$mentionTitle.'</span><br/>') : '');
+            //(!empty($project_year) ? print_r('<span class="lighten-text">'.$project_year.'</span><br/>') : '');
             (!empty($eleve) ? print_r('<span class="darken-text">'.$eleve.'</span><br/>') : '');
-            (!empty($url_pageProjet) ? the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><span class="text-primary">', '</span></a>' ) : '');
+            (!empty($url_pageProjet) ? the_title( '<a class="text-primary" href="'.$url_pageProjet.'" title="projet"><h2 class="text-primary">', '</h2></a>' ) : '');
           ?>
         </div>
       </div>

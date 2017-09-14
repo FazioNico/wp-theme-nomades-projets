@@ -3,7 +3,7 @@
 # @Date:   05-10-2016
 # @Email:  contact@nicolasfazio.ch
 # @Last modified by:   webmaster-fazio
-# @Last modified time: 18-05-2017
+# @Last modified time: 14-09-2017
 
 /**
  * Template part for displaying PROJET IN SINGLE PAGE.
@@ -47,6 +47,7 @@
       ?>
       <p><?php  echo $mentionTitle;?></p>
 			<p><?php print($eleve);?></p>
+      <p><?php (!empty($project_year) ? print_r('<span class="lighten-text">'.$project_year.'</span>') : '');?></p>
 	</header>
 	<div class="entry-content">
 		<?php

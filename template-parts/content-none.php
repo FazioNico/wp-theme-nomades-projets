@@ -1,4 +1,10 @@
 <?php
+# @Author: Nicolas Fazio <webmaster-fazio>
+# @Date:   28-09-2016
+# @Email:  contact@nicolasfazio.ch
+# @Last modified by:   webmaster-fazio
+# @Last modified time: 26-06-2017
+
 /**
  * Template part for displaying a message that posts cannot be found.
  *
@@ -11,27 +17,12 @@
 
 <section class="no-results not-found">
 	<header class="page-header">
-		<h1 class="page-title"><?php esc_html_e( 'Nothing Found', 'nomades-projets' ); ?></h1>
+		<h1 class="page-title">Aucun projet</h1>
 	</header><!-- .page-header -->
 
 	<div class="page-content">
-		<?php
-		if ( is_home() && current_user_can( 'publish_posts' ) ) : ?>
-
-			<p><?php printf( wp_kses( __( 'Ready to publish your first post? <a href="%1$s">Get started here</a>.', 'nomades-projets' ), array( 'a' => array( 'href' => array() ) ) ), esc_url( admin_url( 'post-new.php' ) ) ); ?></p>
-
-		<?php elseif ( is_search() ) : ?>
-
-			<p><?php esc_html_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'nomades-projets' ); ?></p>
-			<?php
-				get_search_form();
-
-		else : ?>
-
-			<p><?php esc_html_e( 'It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help.', 'nomades-projets' ); ?></p>
-			<?php
-				get_search_form();
- 
-		endif; ?>
+			<p>
+				Il y a actuelement aucun projet d'élève de disponible dans cette formation.
+			</p>
 	</div><!-- .page-content -->
 </section><!-- .no-results -->
